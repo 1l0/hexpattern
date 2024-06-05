@@ -241,6 +241,7 @@ class Reaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final intl.NumberFormat numberFormat = intl.NumberFormat.compact();
+    debugPrint('${numberFormat}');
     return Row(
       children: [
         Icon(

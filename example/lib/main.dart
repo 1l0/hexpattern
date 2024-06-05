@@ -103,7 +103,6 @@ class _MockPageState extends State<MockPage> {
               text: sampleText,
             ),
             Card(
-              top: true,
               name: 'reishisaza',
               pubkeyHex:
                   '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e',
@@ -136,7 +135,6 @@ class _MockPageState extends State<MockPage> {
               text: sampleText,
             ),
             Card(
-              top: true,
               name: 'reishisaza',
               pubkeyHex:
                   '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e',
@@ -180,7 +178,7 @@ class NosutaTheme {
     final td = ThemeData.from(
       colorScheme: const ColorScheme.dark(
         primary: Color.fromARGB(255, 255, 255, 255),
-        secondary: Color.fromARGB(255, 189, 189, 189),
+        secondary: Color.fromARGB(255, 110, 184, 221),
         onSecondaryContainer: Color.fromARGB(255, 255, 255, 255),
         surface: Color.fromARGB(255, 29, 29, 29),
         onSurface: Color.fromARGB(255, 207, 207, 207),
