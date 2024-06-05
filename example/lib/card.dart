@@ -6,8 +6,9 @@ const double _genericStride = 15;
 const double _nestedStride = _genericStride * 0.5;
 const double _avatarRadius = _genericStride * 1.5;
 const double _reactionBarIconSize = _genericStride;
-const double _reactionBarFontSize = _genericStride * 0.67;
-const double _reactionBarStride = _genericStride * 0.33;
+const double _reactionBarFontSize = _genericStride * 0.75;
+const double _reactionBarStride = _genericStride * 0.25;
+const int _lessTextLength = 300;
 
 class Card extends StatelessWidget {
   const Card({
@@ -86,12 +87,26 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final more = text.length > _lessTextLength;
+    var t = text;
+    if (more) t = '${text.substring(0, _lessTextLength)}… ';
     return SizedBox(
       width: double.infinity,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
+      child: RichText(
+        text: TextSpan(
+          text: t,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+          children: [
+            if (more)
+              TextSpan(
+                text: 'Show more',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -119,7 +134,6 @@ class IdentityBar extends StatelessWidget {
                 child: Text(
                   name,
                   maxLines: 1,
-                  textAlign: TextAlign.start,
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -131,7 +145,7 @@ class IdentityBar extends StatelessWidget {
               const SizedBox(
                 width: _nestedStride,
               ),
-              PubkeyMonochrome(pubkeyHex: pubkeyHex, alpha: 192),
+              PubkeyMonochrome(pubkeyHex: pubkeyHex, alpha: 128),
             ],
           ),
         ),
@@ -199,8 +213,8 @@ class ReactionBar extends StatelessWidget {
             children: [
               Reaction(iconData: Icons.mode_comment_outlined, count: 0),
               Reaction(iconData: Icons.repeat, count: 1000),
-              Reaction(iconData: Icons.electric_bolt_outlined, count: 1000),
-              Reaction(iconData: Icons.favorite_outline, count: 1000),
+              Reaction(iconData: Icons.bolt_outlined, count: 1000),
+              Reaction(iconData: Icons.star_outline, count: 1000),
               Reaction(iconData: Icons.bookmark_outline),
             ],
           ),

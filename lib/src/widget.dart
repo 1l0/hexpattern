@@ -102,10 +102,7 @@ class PubkeyMonochrome extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 fontSize: height * 1.25,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurfaceVariant
-                    .withAlpha(alpha),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             ...series,
@@ -114,10 +111,7 @@ class PubkeyMonochrome extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 fontSize: height * 1.25,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurfaceVariant
-                    .withAlpha(alpha),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ],
