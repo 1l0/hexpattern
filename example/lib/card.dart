@@ -3,19 +3,21 @@ import 'package:intl/intl.dart' as intl;
 import 'package:hexpattern/hexpattern.dart';
 
 const double _genericStride = 15;
-const double _nestedStride = 7.5;
-const double _reactionBarIconSize = 20;
-const double _reactionBarFontSize = 10;
+const double _nestedStride = _genericStride * 0.5;
+const double _avatarRadius = _genericStride * 1.5;
+const double _reactionBarIconSize = _genericStride;
+const double _reactionBarFontSize = _genericStride * 0.67;
+const double _reactionBarStride = _genericStride * 0.33;
 
 class Card extends StatelessWidget {
-  Card({
+  const Card({
     super.key,
     required this.name,
     required this.pubkeyHex,
     required this.text,
     this.imageUrl,
     this.mono = true,
-    this.secondaryColor = const Color.fromARGB(255, 134, 134, 134),
+    this.top = false,
   });
 
   final String name;
@@ -23,207 +25,226 @@ class Card extends StatelessWidget {
   final String text;
   final String? imageUrl;
   final bool mono;
-  final Color? secondaryColor;
-  final intl.NumberFormat numberFormat = intl.NumberFormat.compact();
+  final bool top;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // width: double.infinity,s
-      child: Column(
-        children: [
-          const SizedBox(
-            height: _genericStride,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: _genericStride),
-            child: SizedBox(
-              width: double.infinity,
-              child: Text(
-                text,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: _genericStride,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: _nestedStride, right: _nestedStride),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      right: _nestedStride, bottom: _genericStride),
-                  child: CircleAvatar(
-                    radius: _genericStride * 1.25,
-                    backgroundImage:
-                        imageUrl != null ? NetworkImage(imageUrl!) : null,
-                  ),
-                ),
-                // const SizedBox(
-                //   width: _nestedStride,
-                // ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: _nestedStride, right: _nestedStride),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          name,
-                          maxLines: 1,
-                          textAlign: TextAlign.end,
-                          softWrap: false,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: _nestedStride * 0.25,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Opacity(
-                              opacity: 0.67,
-                              child: PubkeyMonochrome(pubkeyHex: pubkeyHex),
-                            ),
-                            const SizedBox(
-                              width: _nestedStride,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: _nestedStride * 0.5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.mode_comment_outlined,
-                            size: _reactionBarIconSize,
-                            color: secondaryColor,
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: _reactionBarFontSize,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: _nestedStride * 1.5,
-                      ),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.repeat,
-                            size: _reactionBarIconSize,
-                            color: secondaryColor,
-                          ),
-                          Text(
-                            numberFormat.format(1000),
-                            style: TextStyle(
-                              fontSize: _reactionBarFontSize,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: _nestedStride * 1.5,
-                      ),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.electric_bolt_outlined,
-                            size: _reactionBarIconSize,
-                            color: secondaryColor,
-                          ),
-                          Text(
-                            numberFormat.format(1000),
-                            style: TextStyle(
-                              fontSize: _reactionBarFontSize,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: _nestedStride * 1.5,
-                      ),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.favorite_outline,
-                            size: _reactionBarIconSize,
-                            // color: Color.fromARGB(124, 255, 0, 0),
-                            color: secondaryColor,
-                          ),
-                          Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: _reactionBarFontSize,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: _nestedStride * 1.5,
-                      ),
-                      Column(
-                        children: [
-                          Icon(
-                            Icons.more_vert,
-                            size: _reactionBarIconSize,
-                            color: secondaryColor,
-                          ),
-                          Text(
-                            '4h',
-                            style: TextStyle(
-                              fontSize: _reactionBarFontSize,
-                              color: secondaryColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // const SizedBox(
-          //   height: _genericStride,
-          // ),
-          // const SizedBox(height: 10),
+    return Column(
+      children: [
+        if (!top)
           Divider(
             height: 0,
             indent: 0,
             endIndent: 0,
-            color: Theme.of(context).colorScheme.outline,
+            color: Theme.of(context).colorScheme.outlineVariant,
           ),
-        ],
+        const SizedBox(
+          height: _nestedStride,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              width: _nestedStride,
+            ),
+            AvatarArea(imageUrl: imageUrl),
+            const SizedBox(
+              width: _nestedStride,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  IdentityBar(name: name, pubkeyHex: pubkeyHex),
+                  Content(text: text),
+                  const SizedBox(
+                    height: _nestedStride,
+                  ),
+                  const ReactionBar(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: _nestedStride,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: _nestedStride,
+        ),
+      ],
+    );
+  }
+}
+
+class Content extends StatelessWidget {
+  const Content({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
     );
   }
 }
 
-const sampleText =
-    "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', \nmaking it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).";
+class IdentityBar extends StatelessWidget {
+  const IdentityBar({
+    super.key,
+    required this.name,
+    required this.pubkeyHex,
+  });
+
+  final String name;
+  final String pubkeyHex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
+            children: [
+              Flexible(
+                child: Text(
+                  name,
+                  maxLines: 1,
+                  textAlign: TextAlign.start,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: _nestedStride,
+              ),
+              PubkeyMonochrome(pubkeyHex: pubkeyHex, alpha: 192),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: _nestedStride,
+        ),
+        Text(
+          '5/21',
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: _reactionBarFontSize,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(
+          width: _nestedStride,
+        ),
+        Icon(
+          Icons.more_horiz,
+          size: _reactionBarIconSize,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        const SizedBox(
+          width: _nestedStride,
+        ),
+      ],
+    );
+  }
+}
+
+class AvatarArea extends StatelessWidget {
+  const AvatarArea({
+    super.key,
+    required this.imageUrl,
+  });
+
+  final String? imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: _avatarRadius,
+          backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+        ),
+      ],
+    );
+  }
+}
+
+class ReactionBar extends StatelessWidget {
+  const ReactionBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Reaction(iconData: Icons.mode_comment_outlined, count: 0),
+              Reaction(iconData: Icons.repeat, count: 1000),
+              Reaction(iconData: Icons.electric_bolt_outlined, count: 1000),
+              Reaction(iconData: Icons.favorite_outline, count: 1000),
+              Reaction(iconData: Icons.bookmark_outline),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: _genericStride,
+        ),
+        Reaction(iconData: Icons.ios_share_outlined),
+      ],
+    );
+  }
+}
+
+class Reaction extends StatelessWidget {
+  const Reaction({
+    super.key,
+    required this.iconData,
+    this.count = 0,
+  });
+
+  final IconData iconData;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final intl.NumberFormat numberFormat = intl.NumberFormat.compact();
+    return Row(
+      children: [
+        Icon(
+          iconData,
+          size: _reactionBarIconSize,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        const SizedBox(
+          width: _reactionBarStride,
+        ),
+        Text(
+          count != 0 ? numberFormat.format(count) : '',
+          style: TextStyle(
+            fontSize: _reactionBarFontSize,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}

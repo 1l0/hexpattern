@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'converter.dart';
 
@@ -70,11 +69,13 @@ class PubkeyMonochrome extends StatelessWidget {
     // this.height = 4,
     this.width = 30,
     this.height = 8,
+    this.alpha = 255,
   });
 
   final String pubkeyHex;
   final double width;
   final double height;
+  final int alpha;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,7 @@ class PubkeyMonochrome extends StatelessWidget {
     final series = colors
         .getRange(1, 31)
         .map((c) => ColoredBox(
-              color: c,
+              color: c.withAlpha(alpha),
               child: SizedBox(
                 width: width / 32,
                 height: height,
@@ -101,6 +102,10 @@ class PubkeyMonochrome extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 fontSize: height * 1.25,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurfaceVariant
+                    .withAlpha(alpha),
               ),
             ),
             ...series,
@@ -109,6 +114,10 @@ class PubkeyMonochrome extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 fontSize: height * 1.25,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurfaceVariant
+                    .withAlpha(alpha),
               ),
             ),
           ],
