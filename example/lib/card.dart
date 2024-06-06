@@ -145,7 +145,8 @@ class IdentityBar extends StatelessWidget {
               const SizedBox(
                 width: _nestedStride,
               ),
-              PubkeyMonochrome(pubkeyHex: pubkeyHex, alpha: 128),
+              PubkeyMonochrome(pubkeyHex: pubkeyHex, alpha: 192),
+              // PubkeyColors(pubkeyHex: pubkeyHex, alpha: 192),
             ],
           ),
         ),
@@ -241,7 +242,6 @@ class Reaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final intl.NumberFormat numberFormat = intl.NumberFormat.compact();
-    debugPrint('${numberFormat}');
     return Row(
       children: [
         Icon(

@@ -6,55 +6,67 @@ class PubkeyColors extends StatelessWidget {
   const PubkeyColors({
     super.key,
     required this.pubkeyHex,
-    // this.width = 27 * 1.618,
-    // this.height = 4,
-    this.width = 35,
-    this.height = 5,
+    this.height = 8,
+    this.alpha = 255,
   });
 
   final String pubkeyHex;
-  final double width;
   final double height;
+  final int alpha;
 
   @override
   Widget build(BuildContext context) {
+    final pubkeylen = pubkeyHex.length;
     final colors = HexToColors.pubkeyToColors(pubkeyHex);
+
+    // final strange = ColoredBox(
+    //   color: colors[0].withAlpha(alpha),
+    //   child: SizedBox(
+    //     width: height * 0.618,
+    //     height: height,
+    //   ),
+    // );
+
     final series = colors
-        .getRange(0, 10)
+        .getRange(1, 11)
         .map((c) => ColoredBox(
-              color: c,
+              color: c.withAlpha(alpha),
               child: SizedBox(
-                width: width / 10,
-                height: height * 2 / 3,
+                width: height * 0.618,
+                height: height,
               ),
             ))
         .toList(growable: false);
-    final strange = ColoredBox(
-      color: colors[10],
-      child: SizedBox(
-        width: width / 2,
-        height: height / 3,
-      ),
-    );
-    final charm = ColoredBox(
-      color: colors[11],
-      child: SizedBox(
-        width: width / 2,
-        height: height / 3,
-      ),
-    );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+
+    // final charm = ColoredBox(
+    //   color: colors[11].withAlpha(alpha),
+    //   child: SizedBox(
+    //     width: height * 0.618,
+    //     height: height,
+    //   ),
+    // );
+
+    // return Row(
+    //   children: [strange, ...series, charm],
+    // );
+    return Row(
       children: [
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: series,
+        Text(
+          pubkeyHex.substring(0, 2),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height, // * 1.25,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
-        Row(
-          children: [
-            strange,
-            charm,
-          ],
+        ...series,
+        Text(
+          pubkeyHex.substring(pubkeylen - 2, pubkeylen),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height, // * 1.25,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -65,56 +77,48 @@ class PubkeyMonochrome extends StatelessWidget {
   const PubkeyMonochrome({
     super.key,
     required this.pubkeyHex,
-    // this.width = 27 * 1.618,
-    // this.height = 4,
-    this.width = 30,
     this.height = 8,
     this.alpha = 255,
   });
 
   final String pubkeyHex;
-  final double width;
   final double height;
   final int alpha;
 
   @override
   Widget build(BuildContext context) {
-    var pubkeylen = pubkeyHex.length;
+    final pubkeylen = pubkeyHex.length;
     final colors = HexToColors.pubkeyToMonochrome(pubkeyHex);
+
     final series = colors
         .getRange(1, 31)
         .map((c) => ColoredBox(
               color: c.withAlpha(alpha),
               child: SizedBox(
-                width: width / 32,
+                width: height * 0.206,
                 height: height,
               ),
             ))
         .toList(growable: false);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+
+    return Row(
       children: [
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              pubkeyHex.substring(0, 2),
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: height * 1.25,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-            ...series,
-            Text(
-              pubkeyHex.substring(pubkeylen - 2, pubkeylen),
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: height * 1.25,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
+        Text(
+          pubkeyHex.substring(0, 2),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height, // * 1.25,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        ...series,
+        Text(
+          pubkeyHex.substring(pubkeylen - 2, pubkeylen),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height, // * 1.25,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -125,15 +129,15 @@ class PubkeyLeadColor extends StatelessWidget {
   const PubkeyLeadColor({
     super.key,
     required this.pubkeyHex,
-    // this.width = 27 * 1.618,
-    // this.height = 4,
-    this.width = 35,
+    this.width = 40,
     this.height = 5,
+    this.alpha = 255,
   });
 
   final String pubkeyHex;
   final double width;
   final double height;
+  final int alpha;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +145,7 @@ class PubkeyLeadColor extends StatelessWidget {
     debugPrint('${colors.length}');
     final List<ColoredBox> boxes = [
       ColoredBox(
-        color: colors[0],
+        color: colors[0].withAlpha(alpha),
         child: SizedBox(
           width: width / 11,
           height: height,
@@ -149,9 +153,9 @@ class PubkeyLeadColor extends StatelessWidget {
       )
     ];
     final series = colors
-        .getRange(1, 30)
+        .getRange(1, 24)
         .map((c) => ColoredBox(
-              color: c,
+              color: c.withAlpha(alpha),
               child: SizedBox(
                 width: width / 32,
                 height: height,
@@ -159,14 +163,15 @@ class PubkeyLeadColor extends StatelessWidget {
             ))
         .toList(growable: true);
     boxes.addAll(series);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: boxes,
-        ),
-      ],
+    boxes.add(ColoredBox(
+      color: colors[27].withAlpha(alpha),
+      child: SizedBox(
+        width: width / 11,
+        height: height,
+      ),
+    ));
+    return Row(
+      children: boxes,
     );
   }
 }
