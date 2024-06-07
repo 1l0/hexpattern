@@ -95,7 +95,7 @@ class PubkeyMonochrome extends StatelessWidget {
         .map((c) => ColoredBox(
               color: c.withAlpha(alpha),
               child: SizedBox(
-                width: height * 0.206,
+                width: height * 0.103,
                 height: height,
               ),
             ))

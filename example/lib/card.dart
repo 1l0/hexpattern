@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:hexpattern/hexpattern.dart';
 
 const double _genericStride = 15;
 const double _nestedStride = _genericStride * 0.5;
-const double _avatarRadius = _genericStride * 1.5;
+const double _avatarRadius = _genericStride * 1.34;
 const double _reactionBarIconSize = _genericStride;
 const double _reactionBarFontSize = _genericStride * 0.75;
 const double _reactionBarStride = _genericStride * 0.25;
@@ -32,16 +34,16 @@ class Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (!top)
-          Divider(
-            height: 0,
-            indent: 0,
-            endIndent: 0,
-            color: Theme.of(context).colorScheme.outlineVariant,
-          ),
-        const SizedBox(
-          height: _nestedStride,
-        ),
+        // if (!top)
+        // Divider(
+        //   height: 0,
+        //   indent: 0,
+        //   endIndent: 0,
+        //   color: Theme.of(context).colorScheme.outlineVariant,
+        // ),
+        // const SizedBox(
+        //   height: _nestedStride,
+        // ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -54,6 +56,7 @@ class Card extends StatelessWidget {
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IdentityBar(name: name, pubkeyHex: pubkeyHex),
                   Content(text: text),
@@ -100,12 +103,19 @@ class Content extends StatelessWidget {
           ),
           children: [
             if (more)
-              TextSpan(
-                text: 'Show more',
-                style: TextStyle(
+              WidgetSpan(
+                child: Icon(
+                  Icons.keyboard_double_arrow_down,
+                  size: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
+            // TextSpan(
+            //   text: 'Show more',
+            //   style: TextStyle(
+            //     color: Theme.of(context).colorScheme.secondary,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -145,33 +155,36 @@ class IdentityBar extends StatelessWidget {
               const SizedBox(
                 width: _nestedStride,
               ),
-              PubkeyMonochrome(pubkeyHex: pubkeyHex, alpha: 192),
+              PubkeyMonochrome(
+                pubkeyHex: pubkeyHex,
+                alpha: 128,
+              ),
               // PubkeyColors(pubkeyHex: pubkeyHex, alpha: 192),
+              const SizedBox(
+                width: _nestedStride,
+              ),
+              Text(
+                '16m',
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: _reactionBarFontSize,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
             ],
           ),
         ),
-        const SizedBox(
-          width: _nestedStride,
-        ),
-        Text(
-          '5/21',
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: _reactionBarFontSize,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const SizedBox(
-          width: _nestedStride,
-        ),
-        Icon(
-          Icons.more_horiz,
-          size: _reactionBarIconSize,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
-        const SizedBox(
-          width: _nestedStride,
-        ),
+        // const SizedBox(
+        //   width: _nestedStride,
+        // ),
+        // Icon(
+        //   Icons.more_horiz,
+        //   size: _reactionBarIconSize,
+        //   color: Theme.of(context).colorScheme.onSurfaceVariant,
+        // ),
+        // const SizedBox(
+        //   width: _nestedStride,
+        // ),
       ],
     );
   }
@@ -205,25 +218,44 @@ class ReactionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    final rand = Random(context.hashCode);
+    return Wrap(
+      spacing: _nestedStride,
+      runSpacing: _nestedStride * 0.5,
+      alignment: WrapAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.start,
       children: [
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Reaction(iconData: Icons.mode_comment_outlined, count: 0),
-              Reaction(iconData: Icons.repeat, count: 1000),
-              Reaction(iconData: Icons.bolt_outlined, count: 1000),
-              Reaction(iconData: Icons.star_outline, count: 1000),
-              Reaction(iconData: Icons.bookmark_outline),
-            ],
+        if (rand.nextDouble() > 0.85)
+          Reaction(
+            iconData: Icons.bookmark,
+            naked: true,
           ),
-        ),
-        SizedBox(
-          width: _genericStride,
-        ),
-        Reaction(iconData: Icons.ios_share_outlined),
+        if (rand.nextBool())
+          Reaction(
+            iconData: Icons.mode_comment_outlined,
+            count: rand.nextInt(20),
+            naked: true,
+          ),
+        if (rand.nextBool())
+          Reaction(
+            iconData: Icons.repeat,
+            count: rand.nextInt(3000),
+            naked: true,
+          ),
+        if (rand.nextBool())
+          Reaction(
+            iconData: Icons.star_outline,
+            count: rand.nextInt(5000),
+            naked: true,
+          ),
+        if (rand.nextBool())
+          Reaction(
+            iconData: Icons.bolt_outlined,
+            count: rand.nextInt(100000),
+            message: 'yet another zap for you',
+          ),
+        AddReaction(iconData: Icons.add),
+        AddReaction(iconData: Icons.more_horiz),
       ],
     );
   }
@@ -234,32 +266,89 @@ class Reaction extends StatelessWidget {
     super.key,
     required this.iconData,
     this.count = 0,
+    this.naked = false,
+    this.message,
   });
 
   final IconData iconData;
   final int count;
+  final bool naked;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
     final intl.NumberFormat numberFormat = intl.NumberFormat.compact();
-    return Row(
-      children: [
-        Icon(
-          iconData,
-          size: _reactionBarIconSize,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
-        const SizedBox(
-          width: _reactionBarStride,
-        ),
-        Text(
-          count != 0 ? numberFormat.format(count) : '',
-          style: TextStyle(
-            fontSize: _reactionBarFontSize,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+
+    return Container(
+      decoration: !naked
+          ? BoxDecoration(
+              color: Theme.of(context).colorScheme.tertiaryContainer,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(_nestedStride)))
+          : null,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            iconData,
+            size: _reactionBarIconSize,
+            color: Theme.of(context).colorScheme.onTertiaryContainer,
           ),
-        ),
-      ],
+          if (count > 0)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  _nestedStride * 0.5, 0, _nestedStride, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    numberFormat.format(count),
+                    style: TextStyle(
+                      fontWeight: message != null ? FontWeight.bold : null,
+                      fontSize: _reactionBarFontSize,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    ),
+                  ),
+                  if (message != null)
+                    const SizedBox(
+                      width: _nestedStride * 0.5,
+                    ),
+                  if (message != null)
+                    Text(
+                      message!,
+                      style: TextStyle(
+                        // fontStyle: FontStyle.italic,
+                        fontSize: _reactionBarFontSize,
+                        color:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class AddReaction extends StatelessWidget {
+  const AddReaction({
+    super.key,
+    required this.iconData,
+  });
+
+  final IconData iconData;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Icon(
+        iconData,
+        size: _reactionBarIconSize,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      onTap: () {},
     );
   }
 }
