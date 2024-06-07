@@ -303,6 +303,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.1"
+  transparent_pointer:
+    dependency: "direct main"
+    description:
+      name: transparent_pointer
+      sha256: "02b498db33f8a6a2f84bb6d27b64e9c27344aadf589c26084058a7845aa690cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   typed_data:
     dependency: transitive
     description:
