@@ -105,7 +105,7 @@ class Content extends StatelessWidget {
             if (more)
               WidgetSpan(
                 child: Icon(
-                  Icons.keyboard_double_arrow_down,
+                  Icons.expand_more,
                   size: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -248,7 +248,7 @@ class ReactionBar extends StatelessWidget {
             count: rand.nextInt(5000),
             naked: true,
           ),
-        if (rand.nextBool())
+        if (rand.nextDouble() > 0.85)
           Reaction(
             iconData: Icons.bolt_outlined,
             count: rand.nextInt(100000),
@@ -292,7 +292,9 @@ class Reaction extends StatelessWidget {
           Icon(
             iconData,
             size: _reactionBarIconSize,
-            color: Theme.of(context).colorScheme.onTertiaryContainer,
+            color: naked
+                ? Theme.of(context).colorScheme.onSurfaceVariant
+                : Theme.of(context).colorScheme.onTertiaryContainer,
           ),
           if (count > 0)
             Padding(
@@ -306,7 +308,9 @@ class Reaction extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: message != null ? FontWeight.bold : null,
                       fontSize: _reactionBarFontSize,
-                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                      color: naked
+                          ? Theme.of(context).colorScheme.onSurfaceVariant
+                          : Theme.of(context).colorScheme.onTertiaryContainer,
                     ),
                   ),
                   if (message != null)

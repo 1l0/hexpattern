@@ -209,8 +209,8 @@ class NosutaTheme {
         primary: Color.fromARGB(255, 255, 255, 255),
         secondary: Color.fromARGB(255, 110, 184, 221),
         onSecondaryContainer: Color.fromARGB(255, 255, 255, 255),
-        tertiaryContainer: Color.fromARGB(255, 237, 237, 237),
-        onTertiaryContainer: Color.fromARGB(255, 0, 0, 0),
+        tertiaryContainer: Color.fromARGB(255, 64, 64, 64),
+        onTertiaryContainer: Color.fromARGB(255, 168, 168, 168),
         surface: Color.fromARGB(255, 29, 29, 29),
         onSurface: Color.fromARGB(255, 207, 207, 207),
         onSurfaceVariant: Color.fromARGB(255, 137, 137, 137),
@@ -227,7 +227,7 @@ class NosutaTheme {
     final td = ThemeData.from(
       colorScheme: const ColorScheme.light(
         primary: Color.fromARGB(255, 0, 0, 0),
-        secondary: Color.fromARGB(255, 0, 179, 255),
+        secondary: Color.fromARGB(255, 0, 156, 222),
         onSecondaryContainer: Color.fromARGB(255, 0, 0, 0),
         tertiaryContainer: Color.fromARGB(255, 247, 247, 247),
         onTertiaryContainer: Color.fromARGB(255, 124, 124, 124),
