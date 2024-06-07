@@ -85,8 +85,8 @@ class _MockPageState extends State<MockPage> {
             ),
             SliverPadding(
               padding: EdgeInsets.symmetric(
-                  horizontal: constraints.maxWidth > 640
-                      ? max(constraints.maxWidth - 640, 0) / 2
+                  horizontal: constraints.maxWidth > columnWidth
+                      ? max(constraints.maxWidth - columnWidth, 0) / 2
                       : 0),
               sliver: const SliverList(
                 delegate: SliverChildListDelegate.fixed(

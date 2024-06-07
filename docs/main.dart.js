@@ -36179,7 +36179,7 @@ L(a){var s=null,r=A.bD(a,s,t.l).w.e===B.V?B.Ah:B.Ai
 return new A.wW(new A.Fc(new A.ab0(this,new A.dv(B.DQ,new A.v0(r,20,B.AQ,s),s)),s),A.af(a).ax.k2,s)}}
 A.ab0.prototype={
 $2(a,b){var s=null,r=this.a,q=A.pa(s,this.b,B.ax,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,s,r.gQC(),s,s,s),p=b.b
-p=p>640?Math.max(p-640,0)/2:0
+p=p>600?Math.max(p-600,0)/2:0
 p=A.c([new A.xr(q,0,0,!0,s),new A.HQ(new A.b2(p,0,p,0),B.a15,s)],t.F)
 q=s
 return new A.oT(p,B.cy,!1,r.d,s,q,s,!1,s,0,s,s,B.ax,B.a_f,s,B.av,B.ao,s)},
