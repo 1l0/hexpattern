@@ -92,8 +92,8 @@ class Content extends StatelessWidget {
     if (more) t = '${text.substring(0, _lessTextLength)}… ';
     return SizedBox(
       width: double.infinity,
-      child: RichText(
-        text: TextSpan(
+      child: SelectableText.rich(
+        TextSpan(
           text: t,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
