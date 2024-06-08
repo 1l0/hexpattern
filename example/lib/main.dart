@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart' hide Card;
 
 import 'package:transparent_pointer/transparent_pointer.dart';
+import 'package:window_manager/window_manager.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 import 'card.dart';
@@ -10,9 +11,23 @@ import 'card.dart';
 const sampleText =
     "t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', \nmaking it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).";
 const contentColumnWidth = 600.0;
-const leftColumnWidth = 150.0;
+const leftColumnWidth = 160.0;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(800, 600),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.hidden,
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
   runApp(const MyApp());
 }
 
@@ -58,18 +73,20 @@ class _MockPageState extends State<MockPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final isDarkMode =
-    //     MediaQuery.of(context).platformBrightness == Brightness.dark;
-    // final logo = Padding(
-    //   padding: const EdgeInsets.symmetric(vertical: 35.0),
-    //   child: Image(
-    //     image: isDarkMode
-    //         ? const AssetImage('images/nosuta_dark.png')
-    //         : const AssetImage('images/nosuta_light.png'),
-    //     fit: BoxFit.fitHeight,
-    //     height: 20,
-    //   ),
-    // );
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo = Column(
+      children: [
+        Image(
+          image: isDarkMode
+              ? const AssetImage('images/nosuta_dark.png')
+              : const AssetImage('images/nosuta_light.png'),
+          fit: BoxFit.fitHeight,
+          height: 20,
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: LayoutBuilder(builder: (context, constraints) {
@@ -212,27 +229,42 @@ class _MockPageState extends State<MockPage> {
             if (leftColumnPadding > 0)
               TransparentPointer(
                 child: Padding(
-                  padding: EdgeInsets.only(left: leftColumnPadding),
+                  padding: EdgeInsets.fromLTRB(leftColumnPadding, 45, 0, 0),
                   child: Container(
                     color: Theme.of(context).colorScheme.surfaceBright,
                     width: leftColumnWidth,
-                    height: double.infinity,
+                    // height: double.infinity,
                     child: NavigationRail(
+                      leading: logo,
                       extended: true,
-                      destinations: [
+                      useIndicator: false,
+                      destinations: const [
                         NavigationRailDestination(
                           icon: Icon(Icons.timeline),
                           label: Text('Timeline'),
                         ),
                         NavigationRailDestination(
-                          icon: Icon(Icons.timeline),
-                          label: Text('Timeline'),
+                          icon: Icon(Icons.shelves),
+                          label: Text('Shelf'),
                         ),
                         NavigationRailDestination(
-                          icon: Icon(Icons.timeline),
-                          label: Text('Timeline'),
+                          icon: Icon(Icons.mail),
+                          label: Text('Messages'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.account_circle),
+                          label: Text('Account'),
                         ),
                       ],
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: TextButton(
+                          onPressed: () {
+                            //
+                          },
+                          child: const Text('Post'),
+                        ),
+                      ),
                       selectedIndex: 0,
                     ),
                   ),
@@ -256,9 +288,9 @@ class NosutaTheme {
         onTertiaryContainer: Color.fromARGB(255, 168, 168, 168),
         surface: Color.fromARGB(255, 29, 29, 29),
         surfaceBright: Color.fromARGB(255, 41, 41, 41),
+        surfaceContainer: Color.fromARGB(255, 29, 29, 29),
         onSurface: Color.fromARGB(255, 216, 216, 216),
         onSurfaceVariant: Color.fromARGB(255, 137, 137, 137),
-        surfaceContainer: Color.fromARGB(255, 29, 29, 29),
         outlineVariant: Color.fromARGB(255, 66, 66, 66),
       ),
     );
@@ -272,15 +304,16 @@ class NosutaTheme {
     final td = ThemeData.from(
       colorScheme: const ColorScheme.light(
         primary: Color.fromARGB(255, 0, 0, 0),
-        secondary: Color.fromARGB(255, 0, 156, 222),
-        onSecondaryContainer: Color.fromARGB(255, 0, 0, 0),
+        secondary: Color.fromARGB(255, 130, 130, 130),
+        onSecondaryContainer: Color.fromARGB(255, 122, 122, 122),
+        // tertiary: Color.fromARGB(255, 255, 0, 0),
         tertiaryContainer: Color.fromARGB(255, 247, 247, 247),
         onTertiaryContainer: Color.fromARGB(255, 124, 124, 124),
         surface: Color.fromARGB(255, 255, 255, 255),
         surfaceBright: Color.fromARGB(255, 255, 255, 255),
+        surfaceContainer: Color.fromARGB(255, 255, 255, 255),
         onSurface: Color.fromARGB(255, 0, 0, 0),
         onSurfaceVariant: Color.fromARGB(255, 128, 128, 128),
-        surfaceContainer: Color.fromARGB(255, 255, 255, 255),
         outlineVariant: Color.fromARGB(255, 229, 229, 229),
       ),
     );

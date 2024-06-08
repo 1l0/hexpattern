@@ -95,8 +95,8 @@ class Content extends StatelessWidget {
     if (more) t = '${text.substring(0, _lessTextLength)}… ';
     return SizedBox(
       width: double.infinity,
-      child: SelectableText.rich(
-        TextSpan(
+      child: RichText(
+        text: TextSpan(
           text: t,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
@@ -148,7 +148,7 @@ class IdentityBar extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
