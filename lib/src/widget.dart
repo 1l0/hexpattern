@@ -32,7 +32,8 @@ class PubkeyColors extends StatelessWidget {
         .map((c) => ColoredBox(
               color: c.withAlpha(alpha),
               child: SizedBox(
-                width: height * 0.618,
+                width: height * 0.153,
+                // width: height * 0.618,
                 height: height,
               ),
             ))
@@ -87,15 +88,24 @@ class PubkeyMonochrome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pubkeylen = pubkeyHex.length;
+    final dark = Theme.of(context).colorScheme.brightness == Brightness.dark;
+    // final pubkeylen = pubkeyHex.length;
     final colors = HexToColors.pubkeyToMonochrome(pubkeyHex);
 
     final series = colors
-        .getRange(1, 31)
+        .getRange(0, 32)
+        //.getRange(1, 31)
         .map((c) => ColoredBox(
-              color: c.withAlpha(alpha),
+              color: dark
+                  ? c
+                      .withRed(255 - c.red)
+                      .withGreen(255 - c.green)
+                      .withBlue(255 - c.blue)
+                      .withAlpha(alpha)
+                  : c.withAlpha(alpha),
               child: SizedBox(
-                width: height * 0.103,
+                width: height * 0.206,
+                //width: height * 0.103,
                 height: height,
               ),
             ))
@@ -103,23 +113,23 @@ class PubkeyMonochrome extends StatelessWidget {
 
     return Row(
       children: [
-        Text(
-          pubkeyHex.substring(0, 2),
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: height, // * 1.25,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
+        // Text(
+        //   pubkeyHex.substring(0, 2),
+        //   maxLines: 1,
+        //   style: TextStyle(
+        //     fontSize: height, // * 1.25,
+        //     color: Theme.of(context).colorScheme.onSurfaceVariant,
+        //   ),
+        // ),
         ...series,
-        Text(
-          pubkeyHex.substring(pubkeylen - 2, pubkeylen),
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: height, // * 1.25,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
+        // Text(
+        //   pubkeyHex.substring(pubkeylen - 2, pubkeylen),
+        //   maxLines: 1,
+        //   style: TextStyle(
+        //     fontSize: height, // * 1.25,
+        //     color: Theme.of(context).colorScheme.onSurfaceVariant,
+        //   ),
+        // ),
       ],
     );
   }
