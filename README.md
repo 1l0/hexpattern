@@ -2,6 +2,20 @@
 
 # hexpattern
 
-![pubkey to colors]("images/pubkey2colors.png")
+![pubkey to colors](images/pubkey2colors.png)
 
-TODO:
+A reference implementation of Nostr pubkey to colors.
+
+## Why?
+
+- `npub` is nonsense to display.
+  - too long.
+- `npub1bla...bla` is nonsense to display.
+  - `npub1` takes too much space.
+  - `...` means nothing.
+
+## Specs
+
+- Uses hex pubkey.
+- Converts 64 characters to 8 colors.
+- Supports dark and light theme by using AHSL instead of ARGB.
