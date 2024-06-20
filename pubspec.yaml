@@ -1,6 +1,7 @@
 name: hexpattern
 description: "Nostr pubkey to colors"
 version: 0.1.0
+repository: https://github.com/1l0/hexpattern
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
