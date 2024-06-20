@@ -1,10 +1,8 @@
-[![pub package](https://img.shields.io/pub/v/hexpattern.svg)](https://pub.dev/packages/hexpattern)
+# NUD: Pubkey to colors
 
-# hexpattern
+This NUD defines how to convert pubkey to colors.
 
 ![pubkey to colors](images/pubkey2colors.png)
-
-A reference implementation of Nostr pubkey to colors.
 
 [Live demo](https://1l0.github.io/hexpattern/)
 
@@ -19,7 +17,7 @@ A reference implementation of Nostr pubkey to colors.
 ## Specs
 
 - Uses hex pubkey.
-- Converts 64 characters into 8 colors.
+- Converts 64 characters to 8 colors.
   - Splits 64 with 8 length chunks.
   - Converts each 2 in 8 into
     - Alpha (0-255 -> 0.0-1.0)
