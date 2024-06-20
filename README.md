@@ -6,6 +6,8 @@
 
 A reference implementation of Nostr pubkey to colors.
 
+[Live demo](https://1l0.github.io/hexpattern/)
+
 ## Why?
 
 - `npub` is nonsense to display.
