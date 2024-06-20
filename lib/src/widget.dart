@@ -16,9 +16,6 @@ class PubkeyColors extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final dark = colorScheme.brightness == Brightness.dark;
-    final pubkeylen = pubkeyHex.length;
-    // final colors = HexToColors.pubkeyToColors(pubkeyHex);
-    // final colors = HexToColors.pubkeyToARGB(pubkeyHex);
     final colors = HexToColors.pubkeyToAHSL(pubkeyHex, dark);
 
     final series = colors
@@ -94,57 +91,6 @@ class PubkeyMonochrome extends StatelessWidget {
         //   ),
         // ),
       ],
-    );
-  }
-}
-
-class PubkeyLeadColor extends StatelessWidget {
-  const PubkeyLeadColor({
-    super.key,
-    required this.pubkeyHex,
-    this.width = 40,
-    this.height = 5,
-    this.alpha = 255,
-  });
-
-  final String pubkeyHex;
-  final double width;
-  final double height;
-  final int alpha;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = HexToColors.pubkeyToLeadColor(pubkeyHex);
-    debugPrint('${colors.length}');
-    final List<ColoredBox> boxes = [
-      ColoredBox(
-        color: colors[0].withAlpha(alpha),
-        child: SizedBox(
-          width: width / 11,
-          height: height,
-        ),
-      )
-    ];
-    final series = colors
-        .getRange(1, 24)
-        .map((c) => ColoredBox(
-              color: c.withAlpha(alpha),
-              child: SizedBox(
-                width: width / 32,
-                height: height,
-              ),
-            ))
-        .toList(growable: true);
-    boxes.addAll(series);
-    boxes.add(ColoredBox(
-      color: colors[27].withAlpha(alpha),
-      child: SizedBox(
-        width: width / 11,
-        height: height,
-      ),
-    ));
-    return Row(
-      children: boxes,
     );
   }
 }
