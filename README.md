@@ -2,7 +2,7 @@
 
 # hexpattern
 
-![pubkey to colors](images/pubkey2colors.png)
+![pubkey to colors](https://github.com/1l0/hexpattern/blob/master/images/pubkey2colors.png?raw=true)
 
 A reference implementation of Nostr pubkey to colors.
 
