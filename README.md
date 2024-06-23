@@ -21,7 +21,7 @@ A reference implementation of Nostr pubkey to colors.
 - Uses hex pubkey.
 - Converts 64 characters into 8 colors.
   - Splits 64 with 8 length chunks.
-  - Converts each 2 in 8 into
+  - Converts each 2 in 8 into AHSL.
     - Alpha (0-255 -> 0.0-1.0)
     - Hue (0-255 -> 0.0-360.0)
     - Saturation (0-255 -> 0.0-1.0)
