@@ -101,59 +101,48 @@ class _DemoState extends State<Demo> {
     return Scaffold(
       backgroundColor: colScheme.surface,
       body: LayoutBuilder(builder: (context, constraints) {
-        final contentColumnPadding = constraints.maxWidth > contentColumnWidth
-            ? max(constraints.maxWidth - contentColumnWidth, 0.0) / 2.0
-            : 0.0;
+        final height = constraints.maxWidth / 12;
+        final pad = height * 2;
         return Stack(
           children: [
-            CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverPadding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: contentColumnPadding),
-                  sliver: SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.center,
-                        runAlignment: WrapAlignment.spaceEvenly,
-                        spacing: 30.0,
-                        runSpacing: 30.0,
-                        children: [
-                          Text(
-                            'pubkey to colors',
-                            style: Theme.of(context).textTheme.headlineLarge,
-                          ),
-                          Row(
-                            children: [
-                              const Text('pubkey: '),
-                              Expanded(
-                                child: TextField(
-                                  controller: textEditingController,
-                                  style: const TextStyle(
-                                    fontSize: 13.9,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (pubkey == null)
-                            const SizedBox(
-                              height: contentColumnWidth / 8,
-                              child: Text('pubkey is not valid'),
-                            ),
-                          if (pubkey != null)
-                            PubkeyColors(
-                              pubkeyHex: pubkey!,
-                              height: contentColumnWidth / 8,
-                            ),
-                        ],
-                      ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Enter pubkey',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: pad),
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: 3,
+                    minLines: 1,
+                    style: const TextStyle(
+                      fontSize: 13.9,
                     ),
                   ),
                 ),
+                if (pubkey == null)
+                  Padding(
+                    padding: EdgeInsets.all(height / 2),
+                    child: Text(
+                      'pubkey is not valid',
+                      style: TextStyle(color: colScheme.error),
+                    ),
+                  ),
+                if (pubkey != null)
+                  Row(
+                    children: [
+                      const Spacer(),
+                      PubkeyColors(
+                        pubkeyHex: pubkey!,
+                        height: height,
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
               ],
             ),
             Row(

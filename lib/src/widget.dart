@@ -7,10 +7,14 @@ class PubkeyColors extends StatelessWidget {
     super.key,
     required this.pubkeyHex,
     this.height = 5,
+    this.edgeLetters = false,
+    this.edgeLettersColor,
   });
 
   final String pubkeyHex;
   final double height;
+  final bool edgeLetters;
+  final Color? edgeLettersColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,27 @@ class PubkeyColors extends StatelessWidget {
         .toList(growable: false);
 
     return Row(
-      children: [...series],
+      children: [
+        Text(
+          pubkeyHex.substring(0, 1),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height, // * 1.25,
+            color: edgeLettersColor ??
+                Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        ...series,
+        Text(
+          pubkeyHex.substring(pubkeyHex.length - 1, pubkeyHex.length),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height, // * 1.25,
+            color: edgeLettersColor ??
+                Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
     );
   }
 }
