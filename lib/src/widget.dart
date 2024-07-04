@@ -9,12 +9,14 @@ class PubkeyColors extends StatelessWidget {
     this.height = 5,
     this.edgeLetters = false,
     this.edgeLettersColor,
+    this.compress = 0,
   });
 
   final String pubkeyHex;
   final double height;
   final bool edgeLetters;
   final Color? edgeLettersColor;
+  final double compress;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class PubkeyColors extends StatelessWidget {
         .map((c) => ColoredBox(
               color: c,
               child: SizedBox(
-                width: height,
+                width: height / (compress + 1),
                 height: height,
               ),
             ))
