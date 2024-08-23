@@ -40,7 +40,7 @@ class PubkeyColors extends StatelessWidget {
           pubkeyHex.substring(0, 1),
           maxLines: 1,
           style: TextStyle(
-            fontSize: height, // * 1.25,
+            fontSize: height * 1.13,
             color: edgeLettersColor ??
                 Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -50,7 +50,7 @@ class PubkeyColors extends StatelessWidget {
           pubkeyHex.substring(pubkeyHex.length - 1, pubkeyHex.length),
           maxLines: 1,
           style: TextStyle(
-            fontSize: height, // * 1.25,
+            fontSize: height * 1.13,
             color: edgeLettersColor ??
                 Theme.of(context).colorScheme.onSurfaceVariant,
           ),
