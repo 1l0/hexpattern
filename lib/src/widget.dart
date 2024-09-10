@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'converter.dart';
 
+@Deprecated('use Pubkey2Colors')
 class PubkeyColors extends StatelessWidget {
   const PubkeyColors({
     super.key,
@@ -60,52 +61,33 @@ class PubkeyColors extends StatelessWidget {
   }
 }
 
-class PubkeyMonochrome extends StatelessWidget {
-  const PubkeyMonochrome({
+class Pubkey2Colors extends StatelessWidget {
+  const Pubkey2Colors({
     super.key,
     required this.pubkeyHex,
-    this.height = 8,
-    this.intensity = 1.0,
+    this.height = 5,
     this.edgeLettersColor,
     this.compress = 0,
   });
 
   final String pubkeyHex;
   final double height;
-  final double intensity;
   final Color? edgeLettersColor;
   final double compress;
 
   @override
   Widget build(BuildContext context) {
-    // final colorScheme = Theme.of(context).colorScheme;
-    // final dark = colorScheme.brightness == Brightness.dark;
     final colors = HexToColors.pubkeyToMonochrome(pubkeyHex);
 
     final series = colors
         .map((c) => ColoredBox(
               color: c,
               child: SizedBox(
-                width: height * 0.185 / (compress + 1),
+                width: height * 0.2 / (compress + 1),
                 height: height,
               ),
             ))
         .toList(growable: false);
-
-    // final series = colors
-    //     .map((c) => ColoredBox(
-    //           color: dark
-    //               ? c
-    //               : c
-    //                   .withRed(((255 - c.red) * intensity).toInt())
-    //                   .withGreen(((255 - c.green) * intensity).toInt())
-    //                   .withBlue(((255 - c.blue) * intensity).toInt()),
-    //           child: SizedBox(
-    //             width: height * 0.185 / (compress + 1),
-    //             height: height,
-    //           ),
-    //         ))
-    //     .toList(growable: false);
 
     return Row(
       children: [

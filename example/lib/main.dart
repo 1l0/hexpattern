@@ -50,7 +50,7 @@ class _DemoState extends State<Demo> {
 
   String? pubkey;
   double sliderValue = 2;
-  bool isMonochrome = false;
+  bool isMonochrome = true;
 
   @override
   void initState() {
@@ -143,7 +143,7 @@ class _DemoState extends State<Demo> {
                           compress: sliderValue,
                         ),
                       if (isMonochrome)
-                        PubkeyMonochrome(
+                        Pubkey2Colors(
                           pubkeyHex: pubkey!,
                           height: height,
                           compress: sliderValue,
@@ -175,9 +175,9 @@ class _DemoState extends State<Demo> {
                           isMonochrome = value;
                         });
                       }),
-                if (pubkey != null && isMonochrome)
-                  const Text('Mono (experimental)'),
-                if (pubkey != null && !isMonochrome) const Text('Colors'),
+                if (pubkey != null && isMonochrome) const Text('Mono'),
+                if (pubkey != null && !isMonochrome)
+                  const Text('Colors (deprecated)'),
               ],
             ),
             Row(

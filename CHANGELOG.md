@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Use mono for simplicity.
+
 ## 0.3.0
 
 * Add compressor.

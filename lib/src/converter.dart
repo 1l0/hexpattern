@@ -28,7 +28,6 @@ class HexToColors {
     return colors;
   }
 
-  @Deprecated('Use pubkeyToAHSL')
   static List<Color> pubkeyToARGB(String pubkey) {
     if (pubkey.length != 64) {
       throw Exception('pubkey length must be 64: ${pubkey.length}');
