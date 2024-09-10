@@ -46,7 +46,13 @@ class HexToColors {
     //     maxHex4Int.toDouble() *
     //     hex4IntToHue;
 
-    final pattern = List<Color?>.generate(32, (i) {
+    final pattern = List<Color?>.generate(34, (i) {
+      switch (i) {
+        case 32:
+          return HSLColor.fromAHSL(1.0, hues[0], 1.0, 0.5).toColor();
+        case 33:
+          return HSLColor.fromAHSL(1.0, hues[3], 1.0, 0.5).toColor();
+      }
       final v = int.parse(pubkey.substring(i, i + 2), radix: 16);
       if (v <= 128) {
         return null;

@@ -176,7 +176,8 @@ class _DemoState extends State<Demo> {
                         });
                       }),
                 if (pubkey != null && isMonochrome) const Text('Mono'),
-                if (pubkey != null && !isMonochrome) const Text('Shape'),
+                if (pubkey != null && !isMonochrome)
+                  const Text('Identicon (experimental)'),
               ],
             ),
             Row(

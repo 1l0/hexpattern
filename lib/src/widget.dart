@@ -23,6 +23,7 @@ class Pubkey2Pattern extends StatelessWidget {
     final colors = HexToColors.pubkeyToPattern(pubkeyHex);
 
     final series = colors
+        .sublist(0, 32)
         .map((c) => ColoredBox(
               color: c ?? const Color.fromARGB(0, 0, 0, 0),
               child: SizedBox(
@@ -32,19 +33,35 @@ class Pubkey2Pattern extends StatelessWidget {
             ))
         .toList(growable: false);
 
-    return Column(
+    return Row(
       children: [
-        Row(
+        Text(
+          pubkeyHex.substring(0, 1),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: colors[32],
+          ),
+        ),
+        Column(
           children: series.sublist(0, 8),
         ),
-        Row(
+        Column(
           children: series.sublist(8, 16),
         ),
-        Row(
+        Column(
           children: series.sublist(16, 24),
         ),
-        Row(
+        Column(
           children: series.sublist(24, 32),
+        ),
+        Text(
+          pubkeyHex.substring(pubkeyHex.length - 1, pubkeyHex.length),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: colors[33],
+          ),
         ),
       ],
     );
