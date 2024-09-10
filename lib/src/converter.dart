@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 const hex2normal = 0.00392156862745;
@@ -30,7 +28,7 @@ class HexToColors {
     return colors;
   }
 
-  @Deprecated('not used anymore')
+  @Deprecated('Use pubkeyToAHSL')
   static List<Color> pubkeyToARGB(String pubkey) {
     if (pubkey.length != 64) {
       throw Exception('pubkey length must be 64: ${pubkey.length}');
@@ -43,7 +41,6 @@ class HexToColors {
     return colors;
   }
 
-  @Deprecated('cool but hard to distinguish')
   static List<Color> pubkeyToMonochrome(String pubkey) {
     if (pubkey.length != 64) {
       throw Exception('pubkey length must be 64: ${pubkey.length}');

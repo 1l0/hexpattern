@@ -50,6 +50,7 @@ class _DemoState extends State<Demo> {
 
   String? pubkey;
   double sliderValue = 2;
+  bool isMonochrome = false;
 
   @override
   void initState() {
@@ -135,11 +136,18 @@ class _DemoState extends State<Demo> {
                   Row(
                     children: [
                       const Spacer(),
-                      PubkeyColors(
-                        pubkeyHex: pubkey!,
-                        height: height,
-                        compress: sliderValue,
-                      ),
+                      if (!isMonochrome)
+                        PubkeyColors(
+                          pubkeyHex: pubkey!,
+                          height: height,
+                          compress: sliderValue,
+                        ),
+                      if (isMonochrome)
+                        PubkeyMonochrome(
+                          pubkeyHex: pubkey!,
+                          height: height,
+                          compress: sliderValue,
+                        ),
                       const Spacer(),
                     ],
                   ),
@@ -159,6 +167,17 @@ class _DemoState extends State<Demo> {
                   ),
                 if (pubkey != null)
                   Text('Compressed: ${sliderValue.toStringAsFixed(1)}'),
+                if (pubkey != null)
+                  Switch(
+                      value: isMonochrome,
+                      onChanged: (bool value) {
+                        setState(() {
+                          isMonochrome = value;
+                        });
+                      }),
+                if (pubkey != null && isMonochrome)
+                  const Text('Mono (experimental)'),
+                if (pubkey != null && !isMonochrome) const Text('Colors'),
               ],
             ),
             Row(

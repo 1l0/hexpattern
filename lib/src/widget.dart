@@ -65,57 +65,69 @@ class PubkeyMonochrome extends StatelessWidget {
     super.key,
     required this.pubkeyHex,
     this.height = 8,
-    this.alpha = 255,
+    this.intensity = 1.0,
+    this.edgeLettersColor,
+    this.compress = 0,
   });
 
   final String pubkeyHex;
   final double height;
-  final int alpha;
+  final double intensity;
+  final Color? edgeLettersColor;
+  final double compress;
 
   @override
   Widget build(BuildContext context) {
-    final light = Theme.of(context).colorScheme.brightness == Brightness.light;
-    // final pubkeylen = pubkeyHex.length;
+    // final colorScheme = Theme.of(context).colorScheme;
+    // final dark = colorScheme.brightness == Brightness.dark;
     final colors = HexToColors.pubkeyToMonochrome(pubkeyHex);
 
     final series = colors
-        .getRange(0, 32)
-        //.getRange(1, 31)
         .map((c) => ColoredBox(
-              color: light
-                  ? c
-                      .withRed(255 - c.red)
-                      .withGreen(255 - c.green)
-                      .withBlue(255 - c.blue)
-                      .withAlpha(alpha)
-                  : c.withAlpha(alpha),
+              color: c,
               child: SizedBox(
-                width: height * 0.206,
-                //width: height * 0.103,
+                width: height * 0.185 / (compress + 1),
                 height: height,
               ),
             ))
         .toList(growable: false);
 
+    // final series = colors
+    //     .map((c) => ColoredBox(
+    //           color: dark
+    //               ? c
+    //               : c
+    //                   .withRed(((255 - c.red) * intensity).toInt())
+    //                   .withGreen(((255 - c.green) * intensity).toInt())
+    //                   .withBlue(((255 - c.blue) * intensity).toInt()),
+    //           child: SizedBox(
+    //             width: height * 0.185 / (compress + 1),
+    //             height: height,
+    //           ),
+    //         ))
+    //     .toList(growable: false);
+
     return Row(
       children: [
-        // Text(
-        //   pubkeyHex.substring(0, 2),
-        //   maxLines: 1,
-        //   style: TextStyle(
-        //     fontSize: height, // * 1.25,
-        //     color: Theme.of(context).colorScheme.onSurfaceVariant,
-        //   ),
-        // ),
+        Text(
+          pubkeyHex.substring(0, 2),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: edgeLettersColor ??
+                Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
         ...series,
-        // Text(
-        //   pubkeyHex.substring(pubkeylen - 2, pubkeylen),
-        //   maxLines: 1,
-        //   style: TextStyle(
-        //     fontSize: height, // * 1.25,
-        //     color: Theme.of(context).colorScheme.onSurfaceVariant,
-        //   ),
-        // ),
+        Text(
+          pubkeyHex.substring(pubkeyHex.length - 2, pubkeyHex.length),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: edgeLettersColor ??
+                Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
       ],
     );
   }
