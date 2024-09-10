@@ -2,7 +2,7 @@
 
 This NUD defines how to convert pubkey to identicon.
 
-![pubkey to identicon](https://github.com/1l0/hexpattern/blob/master/images/pubkey2identicon.png?raw=true)
+![pubkey to identicon](https://github.com/1l0/hexpattern/blob/master/images/pubkey_identicon.png?raw=true)
 
 [Live demo](https://1l0.github.io/hexpattern/)
 

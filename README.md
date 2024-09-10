@@ -2,7 +2,7 @@
 
 # hexpattern
 
-![pubkey to identicon](https://github.com/1l0/hexpattern/blob/master/images/pubkey2identicon.png?raw=true)
+![pubkey to identicon](https://github.com/1l0/hexpattern/blob/master/images/pubkey_identicon.png?raw=true)
 
 ![pubkey to mono](https://github.com/1l0/hexpattern/blob/master/images/pubkey2mono.png?raw=true)
 
