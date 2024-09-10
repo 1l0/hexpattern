@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Add NUD: Pubkey to identicon.
+
 ## 1.0.0
 
 * Use mono for simplicity.
