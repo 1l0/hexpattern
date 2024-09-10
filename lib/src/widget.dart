@@ -2,7 +2,55 @@ import 'package:flutter/material.dart';
 
 import 'converter.dart';
 
-@Deprecated('use Pubkey2Colors')
+class Pubkey2Pattern extends StatelessWidget {
+  const Pubkey2Pattern({
+    super.key,
+    required this.pubkeyHex,
+    this.height = 5,
+    this.edgeLettersColor,
+    this.compress = 0,
+  });
+
+  final String pubkeyHex;
+  final double height;
+  final Color? edgeLettersColor;
+  final double compress;
+
+  @override
+  Widget build(BuildContext context) {
+    // final colorScheme = Theme.of(context).colorScheme;
+    // final dark = colorScheme.brightness == Brightness.dark;
+    final colors = HexToColors.pubkeyToPattern(pubkeyHex);
+
+    final series = colors
+        .map((c) => ColoredBox(
+              color: c ?? const Color.fromARGB(0, 0, 0, 0),
+              child: SizedBox(
+                width: height * 0.5 / (compress + 1),
+                height: height * 0.5 / (compress + 1),
+              ),
+            ))
+        .toList(growable: false);
+
+    return Column(
+      children: [
+        Row(
+          children: series.sublist(0, 8),
+        ),
+        Row(
+          children: series.sublist(8, 16),
+        ),
+        Row(
+          children: series.sublist(16, 24),
+        ),
+        Row(
+          children: series.sublist(24, 32),
+        ),
+      ],
+    );
+  }
+}
+
 class PubkeyColors extends StatelessWidget {
   const PubkeyColors({
     super.key,
@@ -21,15 +69,15 @@ class PubkeyColors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final dark = colorScheme.brightness == Brightness.dark;
-    final colors = HexToColors.pubkeyToAHSL(pubkeyHex, dark);
+    // final colorScheme = Theme.of(context).colorScheme;
+    // final dark = colorScheme.brightness == Brightness.dark;
+    final colors = HexToColors.pubkeyToHS(pubkeyHex);
 
     final series = colors
         .map((c) => ColoredBox(
               color: c,
               child: SizedBox(
-                width: height / (compress + 1),
+                width: height * 0.5 / (compress + 1),
                 height: height,
               ),
             ))

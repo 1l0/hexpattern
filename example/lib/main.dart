@@ -137,7 +137,7 @@ class _DemoState extends State<Demo> {
                     children: [
                       const Spacer(),
                       if (!isMonochrome)
-                        PubkeyColors(
+                        Pubkey2Pattern(
                           pubkeyHex: pubkey!,
                           height: height,
                           compress: sliderValue,
@@ -176,8 +176,7 @@ class _DemoState extends State<Demo> {
                         });
                       }),
                 if (pubkey != null && isMonochrome) const Text('Mono'),
-                if (pubkey != null && !isMonochrome)
-                  const Text('Colors (deprecated)'),
+                if (pubkey != null && !isMonochrome) const Text('Shape'),
               ],
             ),
             Row(
