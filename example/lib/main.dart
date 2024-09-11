@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeState>();
     return MaterialApp(
-      title: 'pubkey to colors',
+      title: 'Pubkey to waveform',
       theme: DemoTheme.light(),
       darkTheme: DemoTheme.dark(),
       themeMode: themeState.themeMode,
@@ -50,7 +50,7 @@ class _DemoState extends State<Demo> {
 
   String? pubkey;
   double sliderValue = 2;
-  bool isMonochrome = true;
+  bool isMonochrome = false;
 
   @override
   void initState() {
@@ -137,7 +137,7 @@ class _DemoState extends State<Demo> {
                     children: [
                       const Spacer(),
                       if (!isMonochrome)
-                        Pubkey2Pattern(
+                        Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
                           compress: sliderValue,
@@ -175,9 +175,8 @@ class _DemoState extends State<Demo> {
                           isMonochrome = value;
                         });
                       }),
-                if (pubkey != null && isMonochrome) const Text('Mono'),
-                if (pubkey != null && !isMonochrome)
-                  const Text('Identicon (experimental)'),
+                if (pubkey != null && isMonochrome) const Text('Color'),
+                if (pubkey != null && !isMonochrome) const Text('Waveform'),
               ],
             ),
             Row(

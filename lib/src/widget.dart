@@ -8,6 +8,7 @@ class Pubkey2Pattern extends StatelessWidget {
     required this.pubkeyHex,
     this.height = 5,
     this.edgeLettersColor,
+    this.edgeLetterLength = 1,
     this.compress = 0,
   });
 
@@ -15,11 +16,10 @@ class Pubkey2Pattern extends StatelessWidget {
   final double height;
   final Color? edgeLettersColor;
   final double compress;
+  final int edgeLetterLength;
 
   @override
   Widget build(BuildContext context) {
-    // final colorScheme = Theme.of(context).colorScheme;
-    // final dark = colorScheme.brightness == Brightness.dark;
     final colors = HexToColors.pubkeyToPattern(pubkeyHex);
 
     final series = colors
@@ -61,6 +61,93 @@ class Pubkey2Pattern extends StatelessWidget {
           style: TextStyle(
             fontSize: height * 1.13,
             color: colors[33],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Pubkey2Waveform extends StatelessWidget {
+  const Pubkey2Waveform({
+    super.key,
+    required this.pubkeyHex,
+    this.height = 5,
+    this.edgeLettersColor,
+    this.compress = 0,
+    this.edgeLetterLength = 1,
+  });
+
+  final String pubkeyHex;
+  final double height;
+  final Color? edgeLettersColor;
+  final double compress;
+  final int edgeLetterLength;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final dark = colorScheme.brightness == Brightness.dark;
+    final dots = HexToColors.pubkeyToWaveform(pubkeyHex, dark);
+
+    const boxWidth = 0.3;
+    const boxHeight = 0.5;
+
+    final plus = dots
+        .map((dot) => ColoredBox(
+              color: dot.weight > 0
+                  // ? dot.color!
+                  ? colorScheme.onSurfaceVariant
+                  : const Color.fromARGB(0, 0, 0, 0),
+              child: SizedBox(
+                width: height * boxWidth / (compress + 1),
+                height: height * boxHeight * dot.weight.abs(),
+              ),
+            ))
+        .toList(growable: false);
+
+    final minus = dots
+        .map((dot) => ColoredBox(
+              color: dot.weight < 0
+                  // ? dot.color!
+                  ? colorScheme.onSurfaceVariant
+                  : const Color.fromARGB(0, 0, 0, 0),
+              child: SizedBox(
+                width: height * boxWidth / (compress + 1),
+                height: height * boxHeight * dot.weight.abs(),
+              ),
+            ))
+        .toList(growable: false);
+
+    return Row(
+      children: [
+        Text(
+          pubkeyHex.substring(0, edgeLetterLength),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+        Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: plus,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: minus,
+            ),
+          ],
+        ),
+        Text(
+          pubkeyHex.substring(
+              pubkeyHex.length - edgeLetterLength, pubkeyHex.length),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: colorScheme.onSurfaceVariant,
           ),
         ),
       ],

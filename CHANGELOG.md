@@ -1,3 +1,7 @@
+## 2.0.0
+
+* NUD: Pubkey to waveform. Final decision.
+
 ## 1.1.0
 
 * Add NUD: Pubkey to identicon.
