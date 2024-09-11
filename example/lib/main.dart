@@ -49,7 +49,6 @@ class _DemoState extends State<Demo> {
       text: '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e');
 
   String? pubkey;
-  double sliderValue = 2;
   bool isMonochrome = false;
 
   @override
@@ -140,33 +139,15 @@ class _DemoState extends State<Demo> {
                         Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
-                          compress: sliderValue,
                         ),
                       if (isMonochrome)
                         Pubkey2Colors(
                           pubkeyHex: pubkey!,
                           height: height,
-                          compress: sliderValue,
                         ),
                       const Spacer(),
                     ],
                   ),
-                if (pubkey != null)
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: pad),
-                    child: Slider(
-                      value: sliderValue,
-                      onChanged: (v) {
-                        setState(() {
-                          sliderValue = v;
-                        });
-                      },
-                      min: 0.0,
-                      max: 4.0,
-                    ),
-                  ),
-                if (pubkey != null)
-                  Text('Compressed: ${sliderValue.toStringAsFixed(1)}'),
                 if (pubkey != null)
                   Switch(
                       value: isMonochrome,
