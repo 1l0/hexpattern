@@ -34331,10 +34331,10 @@ A.a8K.prototype={
 $0(){this.b.f=this.a.a},
 $S:0}
 A.a8H.prototype={
-$2(a,b){var s,r,q=null,p=b.b/12,o=p*2,n=A.fM("Enter pubkey",q,q,q,A.a5(a).p2.f,q,q),m=this.a,l=t.E
+$2(a,b){var s,r,q=null,p=b.b/12,o=p*2,n=A.fM("Pubkey to waveform",q,q,q,A.a5(a).p2.f,q,q),m=this.a,l=t.E
 n=A.b([n,new A.dL(new A.aU(o,0,o,0),new A.xh(m.e,B.jb,B.Nq,B.JS,B.JT,3,1,!0,q),q)],l)
 if(m.f==null){s=p/2
-n.push(new A.dL(new A.aU(s,s,s,s),A.fM("pubkey is not valid",q,q,q,A.ed(q,q,this.b.fy,q,q,q,q,q,q,q,q,q,q,q,q,q,q,!0,q,q,q,q,q,q,q,q),q,q),q))}if(m.f!=null){s=A.b([B.j4],l)
+n.push(new A.dL(new A.aU(s,s,s,s),A.fM("Invalid pubkey",q,q,q,A.ed(q,q,this.b.fy,q,q,q,q,q,q,q,q,q,q,q,q,q,q,!0,q,q,q,q,q,q,q,q),q,q),q))}if(m.f!=null){s=A.b([B.j4],l)
 if(!m.r){r=m.f
 r.toString
 s.push(new A.Ge(r,p,q))}if(m.r){r=m.f

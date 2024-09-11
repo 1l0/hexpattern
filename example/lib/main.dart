@@ -109,7 +109,7 @@ class _DemoState extends State<Demo> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Enter pubkey',
+                  'Pubkey to waveform',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 Padding(
@@ -127,7 +127,7 @@ class _DemoState extends State<Demo> {
                   Padding(
                     padding: EdgeInsets.all(height / 2),
                     child: Text(
-                      'pubkey is not valid',
+                      'Invalid pubkey',
                       style: TextStyle(color: colScheme.error),
                     ),
                   ),
