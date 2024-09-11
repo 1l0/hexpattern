@@ -94,29 +94,31 @@ class Pubkey2Waveform extends StatelessWidget {
     const boxHeight = 0.5;
 
     final plus = dots
-        .map((dot) => ColoredBox(
-              color: dot.weight > 0
-                  // ? dot.color!
-                  ? colorScheme.onSurfaceVariant
-                  : const Color.fromARGB(0, 0, 0, 0),
-              child: SizedBox(
+        .map((dot) => dot.weight > 0
+            ? ColoredBox(
+                color: colorScheme.onSurfaceVariant,
+                child: SizedBox(
+                  width: height * boxWidth / (compress + 1),
+                  height: height * boxHeight * dot.weight.abs(),
+                ),
+              )
+            : SizedBox(
                 width: height * boxWidth / (compress + 1),
-                height: height * boxHeight * dot.weight.abs(),
-              ),
-            ))
+              ))
         .toList(growable: false);
 
     final minus = dots
-        .map((dot) => ColoredBox(
-              color: dot.weight < 0
-                  // ? dot.color!
-                  ? colorScheme.onSurfaceVariant
-                  : const Color.fromARGB(0, 0, 0, 0),
-              child: SizedBox(
+        .map((dot) => dot.weight < 0
+            ? ColoredBox(
+                color: colorScheme.onSurfaceVariant,
+                child: SizedBox(
+                  width: height * boxWidth / (compress + 1),
+                  height: height * boxHeight * dot.weight.abs(),
+                ),
+              )
+            : SizedBox(
                 width: height * boxWidth / (compress + 1),
-                height: height * boxHeight * dot.weight.abs(),
-              ),
-            ))
+              ))
         .toList(growable: false);
 
     return Row(
@@ -235,7 +237,7 @@ class Pubkey2Colors extends StatelessWidget {
         .map((c) => ColoredBox(
               color: c,
               child: SizedBox(
-                width: height * 0.2 / (compress + 1),
+                width: height * 0.3 / (compress + 1),
                 height: height,
               ),
             ))
@@ -244,7 +246,7 @@ class Pubkey2Colors extends StatelessWidget {
     return Row(
       children: [
         Text(
-          pubkeyHex.substring(0, 2),
+          pubkeyHex.substring(0, 1),
           maxLines: 1,
           style: TextStyle(
             fontSize: height * 1.13,
@@ -254,7 +256,7 @@ class Pubkey2Colors extends StatelessWidget {
         ),
         ...series,
         Text(
-          pubkeyHex.substring(pubkeyHex.length - 2, pubkeyHex.length),
+          pubkeyHex.substring(pubkeyHex.length - 1, pubkeyHex.length),
           maxLines: 1,
           style: TextStyle(
             fontSize: height * 1.13,

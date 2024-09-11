@@ -76,17 +76,17 @@ class HexToColors {
       throw Exception('pubkey length must be 64: ${pubkey.length}');
     }
 
-    final c1 = int.parse(pubkey.substring(0, 8), radix: 16);
-    final c2 = int.parse(pubkey.substring(8, 16), radix: 16);
-    final c3 = int.parse(pubkey.substring(16, 24), radix: 16);
-    final c4 = int.parse(pubkey.substring(24, 32), radix: 16);
-    final c5 = int.parse(pubkey.substring(32, 40), radix: 16);
-    final c6 = int.parse(pubkey.substring(40, 48), radix: 16);
-    final c7 = int.parse(pubkey.substring(48, 56), radix: 16);
-    final c8 = int.parse(pubkey.substring(56, 64), radix: 16);
-    final hue =
-        ((c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8) % maxHex4Int).toDouble() *
-            hex4IntToHue;
+    // final c1 = int.parse(pubkey.substring(0, 8), radix: 16);
+    // final c2 = int.parse(pubkey.substring(8, 16), radix: 16);
+    // final c3 = int.parse(pubkey.substring(16, 24), radix: 16);
+    // final c4 = int.parse(pubkey.substring(24, 32), radix: 16);
+    // final c5 = int.parse(pubkey.substring(32, 40), radix: 16);
+    // final c6 = int.parse(pubkey.substring(40, 48), radix: 16);
+    // final c7 = int.parse(pubkey.substring(48, 56), radix: 16);
+    // final c8 = int.parse(pubkey.substring(56, 64), radix: 16);
+    // final hue =
+    //     ((c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8) % maxHex4Int).toDouble() *
+    //         hex4IntToHue;
 
     /// 0 ~ 31 = pattern, 32 = key color
     final pattern = List<Dot>.generate(32, (i) {
@@ -94,7 +94,6 @@ class HexToColors {
       final v = int.parse(target, radix: 16).toDouble();
       final w = (v / 128.0) - 1.0;
       return Dot(
-        color: HSLColor.fromAHSL(1.0, hue, 1.0, 0.5).toColor(),
         weight: w,
       );
     }, growable: false);
