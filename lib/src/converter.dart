@@ -71,7 +71,7 @@ class HexToColors {
     return pattern;
   }
 
-  static List<Dot> pubkeyToWaveform(String pubkey, bool dark) {
+  static List<double> pubkeyToWaveform(String pubkey, bool dark) {
     if (pubkey.length != 64) {
       throw Exception('pubkey length must be 64: ${pubkey.length}');
     }
@@ -88,14 +88,10 @@ class HexToColors {
     //     ((c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8) % maxHex4Int).toDouble() *
     //         hex4IntToHue;
 
-    /// 0 ~ 31 = pattern, 32 = key color
-    final pattern = List<Dot>.generate(32, (i) {
+    final pattern = List<double>.generate(32, (i) {
       final target = pubkey.substring(i * 2, i * 2 + 2);
       final v = int.parse(target, radix: 16).toDouble();
-      final w = (v / 128.0) - 1.0;
-      return Dot(
-        weight: w,
-      );
+      return (v / 128.0) - 1.0;
     }, growable: false);
 
     return pattern;
