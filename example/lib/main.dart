@@ -139,6 +139,7 @@ class _DemoState extends State<Demo> {
                         Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
+                          edgeLetterLength: 2,
                         ),
                       if (isMonochrome)
                         Pubkey2Colors(

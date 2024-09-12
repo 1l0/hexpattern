@@ -42,14 +42,14 @@ class Pubkey2Waveform extends StatelessWidget {
   const Pubkey2Waveform({
     super.key,
     required this.pubkeyHex,
-    this.height = 5,
-    this.edgeLettersColor,
+    this.height = 10,
+    this.color,
     this.edgeLetterLength = 1,
   });
 
   final String pubkeyHex;
   final double height;
-  final Color? edgeLettersColor;
+  final Color? color;
   final int edgeLetterLength;
 
   @override
@@ -70,8 +70,10 @@ class Pubkey2Waveform extends StatelessWidget {
         ),
         CustomPaint(
           size: Size(height * 3.2, height),
-          painter:
-              Waveform(data: waveform, color: colorScheme.onSurfaceVariant),
+          painter: Waveform(
+            data: waveform,
+            color: color ?? colorScheme.onSurfaceVariant,
+          ),
         ),
         Text(
           pubkeyHex.substring(
