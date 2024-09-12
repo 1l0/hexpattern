@@ -1,3 +1,8 @@
+## 2.1.1
+
+* High performance waveform rendering.
+* Update demo.
+
 ## 2.0.0
 
 * NUD: Pubkey to waveform. Final decision.
