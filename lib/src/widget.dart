@@ -185,12 +185,14 @@ class Pubkey2Colors extends StatelessWidget {
     this.height = 5,
     this.edgeLettersColor,
     this.compress = 0,
+    this.edgeLetterLength = 1,
   });
 
   final String pubkeyHex;
   final double height;
   final Color? edgeLettersColor;
   final double compress;
+  final int edgeLetterLength;
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +211,7 @@ class Pubkey2Colors extends StatelessWidget {
     return Row(
       children: [
         Text(
-          pubkeyHex.substring(0, 1),
+          pubkeyHex.substring(0, edgeLetterLength),
           maxLines: 1,
           style: TextStyle(
             fontSize: height * 1.13,
@@ -219,7 +221,8 @@ class Pubkey2Colors extends StatelessWidget {
         ),
         ...series,
         Text(
-          pubkeyHex.substring(pubkeyHex.length - 1, pubkeyHex.length),
+          pubkeyHex.substring(
+              pubkeyHex.length - edgeLetterLength, pubkeyHex.length),
           maxLines: 1,
           style: TextStyle(
             fontSize: height * 1.13,

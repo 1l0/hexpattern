@@ -145,6 +145,7 @@ class _DemoState extends State<Demo> {
                         Pubkey2Colors(
                           pubkeyHex: pubkey!,
                           height: height,
+                          edgeLetterLength: 2,
                         ),
                       const Spacer(),
                     ],
