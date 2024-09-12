@@ -8,14 +8,12 @@ class Pubkey2Waveform extends StatelessWidget {
     required this.pubkeyHex,
     this.height = 5,
     this.edgeLettersColor,
-    this.compress = 0,
     this.edgeLetterLength = 1,
   });
 
   final String pubkeyHex;
   final double height;
   final Color? edgeLettersColor;
-  final double compress;
   final int edgeLetterLength;
 
   @override
@@ -32,12 +30,12 @@ class Pubkey2Waveform extends StatelessWidget {
             ? ColoredBox(
                 color: colorScheme.onSurfaceVariant,
                 child: SizedBox(
-                  width: height * boxWidth / (compress + 1),
+                  width: height * boxWidth,
                   height: height * boxHeight * dot.weight.abs(),
                 ),
               )
             : SizedBox(
-                width: height * boxWidth / (compress + 1),
+                width: height * boxWidth,
               ))
         .toList(growable: false);
 
@@ -46,12 +44,12 @@ class Pubkey2Waveform extends StatelessWidget {
             ? ColoredBox(
                 color: colorScheme.onSurfaceVariant,
                 child: SizedBox(
-                  width: height * boxWidth / (compress + 1),
+                  width: height * boxWidth,
                   height: height * boxHeight * dot.weight.abs(),
                 ),
               )
             : SizedBox(
-                width: height * boxWidth / (compress + 1),
+                width: height * boxWidth,
               ))
         .toList(growable: false);
 
