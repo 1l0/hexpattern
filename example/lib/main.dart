@@ -49,7 +49,7 @@ class _DemoState extends State<Demo> {
       text: '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e');
 
   String? pubkey;
-  bool isMonochrome = false;
+  bool chart = false;
 
   @override
   void initState() {
@@ -135,31 +135,33 @@ class _DemoState extends State<Demo> {
                   Row(
                     children: [
                       const Spacer(),
-                      if (!isMonochrome)
+                      if (!chart)
                         Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
                           edgeLetterLength: 2,
+                          chart: false,
                         ),
-                      if (isMonochrome)
-                        Pubkey2Colors(
+                      if (chart)
+                        Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
                           edgeLetterLength: 2,
+                          chart: true,
                         ),
                       const Spacer(),
                     ],
                   ),
                 if (pubkey != null)
                   Switch(
-                      value: isMonochrome,
+                      value: chart,
                       onChanged: (bool value) {
                         setState(() {
-                          isMonochrome = value;
+                          chart = value;
                         });
                       }),
-                if (pubkey != null && isMonochrome) const Text('Color'),
-                if (pubkey != null && !isMonochrome) const Text('Waveform'),
+                if (pubkey != null && chart) const Text('Line'),
+                if (pubkey != null && !chart) const Text('Bar'),
               ],
             ),
             Row(

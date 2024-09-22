@@ -6,31 +6,59 @@ class Waveform extends CustomPainter {
   const Waveform({
     required this.data,
     required this.color,
+    this.chart = false,
   });
 
   final List<double> data;
   final Color color;
+  final bool chart;
 
   @override
   void paint(Canvas canvas, Size size) {
     if (data.isEmpty) {
       return;
     }
-    final paint = Paint()
-      ..isAntiAlias = false
-      ..color = color
-      ..style = PaintingStyle.fill;
+    if (!chart) {
+      final paint = Paint()
+        ..isAntiAlias = false
+        ..color = color
+        ..style = PaintingStyle.fill;
 
-    final q = size.width / data.length;
-    final baseline = size.height * 0.5;
-    for (int i = 0; i < data.length; i++) {
-      final rect = Rect.fromLTRB(
-        q * i,
-        baseline,
-        q * i + q,
-        -baseline * data[i] + baseline,
-      );
-      canvas.drawRect(rect, paint);
+      final q = size.width / data.length;
+      final baseline = size.height * 0.5;
+      for (int i = 0; i < data.length; i++) {
+        final rect = Rect.fromLTRB(
+          q * i,
+          baseline,
+          q * i + q,
+          -baseline * data[i] + baseline,
+        );
+        canvas.drawRect(rect, paint);
+      }
+    } else {
+      final q = size.width / data.length;
+      final baseline = size.height * 0.5;
+      final paint = Paint()
+        ..isAntiAlias = true
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeJoin = StrokeJoin.miter
+        ..strokeCap = StrokeCap.square
+        ..strokeWidth = q * 0.75;
+      final path = Path();
+      for (int i = 0; i < data.length; i++) {
+        if (i == 0) {
+          path.moveTo(
+            q * i + (q * 0.5),
+            -baseline * data[i] + baseline,
+          );
+        }
+        path.lineTo(
+          q * i + (q * 0.5),
+          -baseline * data[i] + baseline,
+        );
+      }
+      canvas.drawPath(path, paint);
     }
   }
 
@@ -45,12 +73,14 @@ class Pubkey2Waveform extends StatelessWidget {
     this.height = 10,
     this.color,
     this.edgeLetterLength = 1,
+    this.chart = false,
   });
 
   final String pubkeyHex;
   final double height;
   final Color? color;
   final int edgeLetterLength;
+  final bool chart;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +103,7 @@ class Pubkey2Waveform extends StatelessWidget {
           painter: Waveform(
             data: waveform,
             color: color ?? colorScheme.onSurfaceVariant,
+            chart: chart,
           ),
         ),
         Text(
