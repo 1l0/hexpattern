@@ -2,30 +2,109 @@ import 'package:flutter/material.dart';
 
 import 'converter.dart';
 
-class Waveform extends CustomPainter {
-  const Waveform({
+class RoundRect extends CustomPainter {
+  const RoundRect({
+    required this.strokeColor,
+    required this.fillColor,
+  });
+
+  final Color strokeColor;
+  final Color fillColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final strokeWidth = size.height * 0.15;
+    final paint = Paint()
+      ..isAntiAlias = true
+      ..color = strokeColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    final rrect = RRect.fromLTRBR(
+      0 + (strokeWidth * 0.5),
+      0 + (strokeWidth * 0.5),
+      size.width - (strokeWidth * 0.5),
+      size.height - (strokeWidth * 0.5),
+      Radius.circular(size.height * 0.5),
+    );
+    canvas.drawRRect(rrect, paint);
+    paint.color = fillColor;
+    paint.style = PaintingStyle.fill;
+    canvas.drawRRect(rrect, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant RoundRect oldDelegate) => false;
+}
+
+class Pubkey2LeadingColor extends StatelessWidget {
+  const Pubkey2LeadingColor({
+    super.key,
+    required this.pubkeyHex,
+    this.height = 10,
+    this.color,
+    this.edgeLetterLength = 2,
+  });
+
+  final String pubkeyHex;
+  final double height;
+  final Color? color;
+  final int edgeLetterLength;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final col = HexToColors.hexToLeadingColor(pubkeyHex);
+
+    return Row(
+      children: [
+        CustomPaint(
+          // size: Size(height * 3.2, height),
+          size: Size(height * 2, height),
+          painter: RoundRect(
+            strokeColor: color ?? colorScheme.onSurfaceVariant,
+            fillColor: col,
+          ),
+        ),
+        Text(
+          pubkeyHex.substring(
+              pubkeyHex.length - edgeLetterLength, pubkeyHex.length),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height * 1.13,
+            color: color ?? colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class WaveformPainter extends CustomPainter {
+  const WaveformPainter({
     required this.data,
     required this.color,
-    this.chart = false,
+    this.punch = false,
   });
 
   final List<double> data;
   final Color color;
-  final bool chart;
+  final bool punch;
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (data.isEmpty) {
+    if (data.isEmpty || data.length != 32) {
       return;
     }
-    if (!chart) {
+    if (!punch) {
+      final q = size.width / data.length;
+      final baseline = size.height * 0.5;
+
       final paint = Paint()
         ..isAntiAlias = false
         ..color = color
         ..style = PaintingStyle.fill;
 
-      final q = size.width / data.length;
-      final baseline = size.height * 0.5;
       for (int i = 0; i < data.length; i++) {
         final rect = Rect.fromLTRB(
           q * i,
@@ -36,34 +115,70 @@ class Waveform extends CustomPainter {
         canvas.drawRect(rect, paint);
       }
     } else {
-      final q = size.width / data.length;
-      final baseline = size.height * 0.5;
+      const row = 4;
+      const col = 8;
+      final qx = size.width / col;
+      final qxh = qx * 0.5;
+      final qy = size.height / row;
+      final qyh = qy * 0.5;
+
       final paint = Paint()
         ..isAntiAlias = true
         ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeJoin = StrokeJoin.miter
-        ..strokeCap = StrokeCap.square
-        ..strokeWidth = q * 0.75;
-      final path = Path();
-      for (int i = 0; i < data.length; i++) {
-        if (i == 0) {
-          path.moveTo(
-            q * i + (q * 0.5),
-            -baseline * data[i] + baseline,
+        ..style = PaintingStyle.fill;
+
+      for (int yi = 0; yi < row; yi++) {
+        for (int xi = 0; xi < col; xi++) {
+          final w = data[(yi * col) + xi] * 0.5 + 0.5;
+          canvas.drawCircle(
+            Offset(
+              qx * xi + qxh,
+              qy * yi + qyh,
+            ),
+            qxh * w,
+            paint,
           );
         }
-        path.lineTo(
-          q * i + (q * 0.5),
-          -baseline * data[i] + baseline,
-        );
       }
-      canvas.drawPath(path, paint);
     }
+    // } else {
+    //   const row = 4;
+    //   const col = 8;
+    //   const pad = 0.0;
+    //   final qx = size.width / col;
+    //   final qy = size.height / row;
+    //   final padx = qx * pad;
+    //   final pady = qy * pad;
+
+    //   final paint = Paint()
+    //     ..isAntiAlias = false
+    //     ..color = color
+    //     ..style = PaintingStyle.fill;
+
+    //   for (int yi = 0; yi < row; yi++) {
+    //     for (int xi = 0; xi < col; xi++) {
+    //       final rect = Rect.fromLTRB(
+    //         qx * xi + padx,
+    //         qy * yi + pady,
+    //         qx * xi + qx - padx,
+    //         qy * yi + qy - pady,
+    //       );
+    //       final norm = data[(yi * col) + xi] * 0.5 + 0.5;
+    //       final c = Color.fromARGB(
+    //         255,
+    //         (255 * norm).toInt(),
+    //         (255 * norm).toInt(),
+    //         (255 * norm).toInt(),
+    //       );
+    //       paint.color = c;
+    //       canvas.drawRect(rect, paint);
+    //     }
+    //   }
+    // }
   }
 
   @override
-  bool shouldRepaint(covariant Waveform oldDelegate) => false;
+  bool shouldRepaint(covariant WaveformPainter oldDelegate) => false;
 }
 
 class Pubkey2Waveform extends StatelessWidget {
@@ -73,14 +188,14 @@ class Pubkey2Waveform extends StatelessWidget {
     this.height = 10,
     this.color,
     this.edgeLetterLength = 1,
-    this.chart = false,
+    this.punch = false,
   });
 
   final String pubkeyHex;
   final double height;
   final Color? color;
   final int edgeLetterLength;
-  final bool chart;
+  final bool punch;
 
   @override
   Widget build(BuildContext context) {
@@ -99,100 +214,13 @@ class Pubkey2Waveform extends StatelessWidget {
           ),
         ),
         CustomPaint(
-          size: Size(height * 3.2, height),
-          painter: Waveform(
-            data: waveform,
-            color: color ?? colorScheme.onSurfaceVariant,
-            chart: chart,
+          // size: Size(height * 3.2, height),
+          size: Size(height * 2, height),
+          painter: WaveformPainter(
+            data: waveform.data,
+            color: waveform.color,
+            punch: punch,
           ),
-        ),
-        Text(
-          pubkeyHex.substring(
-              pubkeyHex.length - edgeLetterLength, pubkeyHex.length),
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: height * 1.13,
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-@Deprecated('use Pubkey2Waveform')
-class Pubkey2WaveformLowPerf extends StatelessWidget {
-  const Pubkey2WaveformLowPerf({
-    super.key,
-    required this.pubkeyHex,
-    this.height = 5,
-    this.edgeLettersColor,
-    this.edgeLetterLength = 1,
-  });
-
-  final String pubkeyHex;
-  final double height;
-  final Color? edgeLettersColor;
-  final int edgeLetterLength;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final dark = colorScheme.brightness == Brightness.dark;
-    final waveform = HexToColors.pubkeyToWaveform(pubkeyHex, dark);
-
-    const boxWidth = 0.1;
-    const boxHeight = 0.5;
-
-    final posi = waveform
-        .map((v) => v > 0
-            ? ColoredBox(
-                color: colorScheme.onSurfaceVariant,
-                child: SizedBox(
-                  width: height * boxWidth,
-                  height: height * boxHeight * v.abs(),
-                ),
-              )
-            : SizedBox(
-                width: height * boxWidth,
-              ))
-        .toList(growable: false);
-
-    final nega = waveform
-        .map((v) => v < 0
-            ? ColoredBox(
-                color: colorScheme.onSurfaceVariant,
-                child: SizedBox(
-                  width: height * boxWidth,
-                  height: height * boxHeight * v.abs(),
-                ),
-              )
-            : SizedBox(
-                width: height * boxWidth,
-              ))
-        .toList(growable: false);
-
-    return Row(
-      children: [
-        Text(
-          pubkeyHex.substring(0, edgeLetterLength),
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: height * 1.13,
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-        Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: posi,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: nega,
-            ),
-          ],
         ),
         Text(
           pubkeyHex.substring(

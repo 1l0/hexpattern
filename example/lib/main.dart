@@ -108,10 +108,16 @@ class _DemoState extends State<Demo> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Pubkey to waveform',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
+                if (!chart)
+                  Text(
+                    'pubkey to Waveform',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                if (chart)
+                  Text(
+                    'pubkey to Punchcard',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: pad),
                   child: TextField(
@@ -139,16 +145,21 @@ class _DemoState extends State<Demo> {
                         Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
-                          edgeLetterLength: 2,
-                          chart: false,
+                          edgeLetterLength: 1,
+                          punch: false,
                         ),
                       if (chart)
                         Pubkey2Waveform(
                           pubkeyHex: pubkey!,
                           height: height,
-                          edgeLetterLength: 2,
-                          chart: true,
+                          edgeLetterLength: 1,
+                          punch: true,
                         ),
+                      // Pubkey2LeadingColor(
+                      //   pubkeyHex: pubkey!,
+                      //   height: height,
+                      //   edgeLetterLength: 2,
+                      // ),
                       const Spacer(),
                     ],
                   ),
@@ -160,8 +171,8 @@ class _DemoState extends State<Demo> {
                           chart = value;
                         });
                       }),
-                if (pubkey != null && chart) const Text('Line'),
-                if (pubkey != null && !chart) const Text('Bar'),
+                if (pubkey != null && chart) const Text('Punchcard'),
+                if (pubkey != null && !chart) const Text('Waveform'),
               ],
             ),
             Row(
