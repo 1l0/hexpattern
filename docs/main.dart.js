@@ -34215,8 +34215,8 @@ $0(){this.b.f=this.a.a},
 $S:0}
 A.a8q.prototype={
 $2(a,b){var s,r,q,p,o=this,n=null,m=b.b/12,l=m*2,k=t.E,j=A.b([],k),i=o.a
-if(!i.r)j.push(A.f9("pubkey to Waveform",n,n,n,A.a9(a).p2.f,n,n))
-if(i.r)j.push(A.f9("pubkey to Punchcard",n,n,n,A.a9(a).p2.f,n,n))
+if(!i.r)j.push(A.f9("Nostr key as waveform",n,n,n,A.a9(a).p2.f,n,n))
+if(i.r)j.push(A.f9("Nostr key as punchcard",n,n,n,A.a9(a).p2.f,n,n))
 j.push(new A.dK(new A.aY(l,0,l,0),new A.x6(i.e,B.jc,B.Ne,B.JJ,B.JK,3,1,!0,n),n))
 if(i.f==null){s=m/2
 j.push(new A.dK(new A.aY(s,s,s,s),A.f9("Invalid pubkey",n,n,n,A.ed(n,n,o.b.fy,n,n,n,n,n,n,n,n,n,n,n,n,n,n,!0,n,n,n,n,n,n,n,n),n,n),n))}if(i.f!=null){s=A.b([B.j6],k)

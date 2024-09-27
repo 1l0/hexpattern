@@ -1,6 +1,6 @@
 [![pub package](https://img.shields.io/pub/v/hexpattern.svg)](https://pub.dev/packages/hexpattern)
 
-# Pubkey to waveform
+# Nostr key as waveform
 
 A reference implementation of [NUD: Nostr key as waveform](NUD-nostrkeyaswaveform.md) (WIP).
 

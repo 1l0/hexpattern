@@ -110,12 +110,12 @@ class _DemoState extends State<Demo> {
               children: [
                 if (!chart)
                   Text(
-                    'pubkey to Waveform',
+                    'Nostr key as waveform',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 if (chart)
                   Text(
-                    'pubkey to Punchcard',
+                    'Nostr key as punchcard',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 Padding(
