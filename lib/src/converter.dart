@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hexpattern/hexpattern.dart';
 
 const hexTonormal = 0.00392156862745;
 const hexTohue = 1.411764705882352;
@@ -10,15 +9,15 @@ const hex2IntToHue = 0.005493247882811;
 const hex4IntToHue = 0.000000083819032;
 const hex2IntToSat = 0.000015259021897;
 
-class HexToColors {
+class NostrKeyConverter {
   static Color hexToLeadingColor(String hex) {
     final c = hex.substring(0, 6);
     return Color(int.parse('FF$c', radix: 16));
   }
 
-  static List<Color> pubkeyToMonochrome(String pubkey) {
+  static List<Color> hexTomono(String pubkey) {
     if (pubkey.length != 64) {
-      throw Exception('pubkey length must be 64: ${pubkey.length}');
+      throw Exception('key length must be 64: ${pubkey.length}');
     }
     final colors = List.generate(32, (i) {
       final c = pubkey.substring(i * 2, i * 2 + 2);
@@ -28,19 +27,10 @@ class HexToColors {
     return colors;
   }
 
-  static List<Color?> pubkeyToPattern(String pubkey) {
+  static List<Color?> hexToPattern(String pubkey) {
     if (pubkey.length != 64) {
-      throw Exception('pubkey length must be 64: ${pubkey.length}');
+      throw Exception('key length must be 64: ${pubkey.length}');
     }
-
-    // int keyColor = 0;
-
-    // for (var n = 0; n < pubkey.length - 16; n += 16) {
-    //   final c1 = int.parse(pubkey.substring(n, n + 8), radix: 16);
-    //   final c2 = int.parse(pubkey.substring(n+8, n + 16), radix: 16);
-    //   keyColor = (keyColor + c1 + c2) % maxHex2Int;
-    // }
-    // final hue = keyColor.toDouble() * hex2IntToHue;
 
     final hues = List<double>.generate(4, (i) {
       final c1 = int.parse(pubkey.substring(i * 16 + 0, i * 16 + 8), radix: 16);
@@ -48,10 +38,6 @@ class HexToColors {
           int.parse(pubkey.substring(i * 16 + 8, i * 16 + 16), radix: 16);
       return ((c1 + c2) % maxHex4Int).toDouble() * hex4IntToHue;
     }, growable: false);
-
-    // final accum = (hues[0] + hues[1] + hues[2] + hues[3]) %
-    //     maxHex4Int.toDouble() *
-    //     hex4IntToHue;
 
     final pattern = List<Color?>.generate(34, (i) {
       switch (i) {
@@ -78,9 +64,9 @@ class HexToColors {
     return pattern;
   }
 
-  static WaveForm pubkeyToWaveform(String pubkey, bool dark) {
+  static WaveForm hexToWaveform(String pubkey, bool dark) {
     if (pubkey.length != 64) {
-      throw Exception('pubkey length must be 64: ${pubkey.length}');
+      throw Exception('key length must be 64: ${pubkey.length}');
     }
 
     final c1 = int.parse(pubkey.substring(0, 8), radix: 16);
@@ -104,9 +90,9 @@ class HexToColors {
     return WaveForm(data: data, color: color);
   }
 
-  static List<Color> pubkeyToHS(String pubkey) {
+  static List<Color> hexToHS(String pubkey) {
     if (pubkey.length != 64) {
-      throw Exception('pubkey length must be 64: ${pubkey.length}');
+      throw Exception('key length must be 64: ${pubkey.length}');
     }
     final colors = List<Color>.generate(16, (i) {
       final h = int.parse(pubkey.substring(i * 4 + 0, i * 4 + 2), radix: 16)
@@ -121,10 +107,9 @@ class HexToColors {
     return colors;
   }
 
-  @Deprecated('use pubkeyToHS')
-  static List<Color> pubkeyToAHSL(String pubkey, bool dark) {
+  static List<Color> hexToAHSL(String pubkey, bool dark) {
     if (pubkey.length != 64) {
-      throw Exception('pubkey length must be 64: ${pubkey.length}');
+      throw Exception('key length must be 64: ${pubkey.length}');
     }
     final colors = List<Color>.generate(8, (i) {
       final a = int.parse(pubkey.substring(i * 8 + 0, i * 8 + 2), radix: 16)
@@ -145,15 +130,6 @@ class HexToColors {
 
     return colors;
   }
-}
-
-class Dot {
-  const Dot({
-    this.color,
-    required this.weight,
-  });
-  final Color? color;
-  final double weight;
 }
 
 class WaveForm {

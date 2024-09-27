@@ -142,14 +142,13 @@ class _DemoState extends State<Demo> {
                     children: [
                       const Spacer(),
                       if (!chart)
-                        Pubkey2Waveform(
-                          pubkeyHex: pubkey!,
+                        NostrKeyAsWaveform(
+                          hexKey: pubkey!,
                           height: height,
-                          edgeLetterLength: 1,
-                          punch: false,
+                          color: colScheme.onSurfaceVariant,
                         ),
                       if (chart)
-                        Pubkey2Waveform(
+                        NostrKeyAsWaveformVer1(
                           pubkeyHex: pubkey!,
                           height: height,
                           edgeLetterLength: 1,

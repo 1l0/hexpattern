@@ -2,77 +2,106 @@ import 'package:flutter/material.dart';
 
 import 'converter.dart';
 
-class RoundRect extends CustomPainter {
-  const RoundRect({
-    required this.strokeColor,
-    required this.fillColor,
+class WaveformPainter extends CustomPainter {
+  const WaveformPainter({
+    required this.data,
+    required this.color,
+    this.padding = 0.25,
   });
 
-  final Color strokeColor;
-  final Color fillColor;
+  final List<double> data;
+  final Color color;
+  final double padding;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.height * 0.15;
-    final paint = Paint()
-      ..isAntiAlias = true
-      ..color = strokeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
+    const row = 2;
+    const col = 16;
+    final qx = size.width / col;
+    final padx = qx * padding * 0.5;
+    final baseline = size.height * 0.5;
 
-    final rrect = RRect.fromLTRBR(
-      0 + (strokeWidth * 0.5),
-      0 + (strokeWidth * 0.5),
-      size.width - (strokeWidth * 0.5),
-      size.height - (strokeWidth * 0.5),
-      Radius.circular(size.height * 0.5),
-    );
-    canvas.drawRRect(rrect, paint);
-    paint.color = fillColor;
-    paint.style = PaintingStyle.fill;
-    canvas.drawRRect(rrect, paint);
+    final paint = Paint()
+      ..isAntiAlias = false
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    for (int yi = 0; yi < row; yi++) {
+      for (int xi = 0; xi < col; xi++) {
+        final norm = data[(yi * col) + xi] * 0.5 + 0.5;
+        if (yi == 0) {
+          final rect = Rect.fromLTRB(
+            qx * xi + padx,
+            baseline - (baseline * norm),
+            qx * xi + qx - padx,
+            baseline,
+          );
+          canvas.drawRect(rect, paint);
+        } else {
+          final rect = Rect.fromLTRB(
+            qx * xi + padx,
+            baseline,
+            qx * xi + qx - padx,
+            baseline + (baseline * norm),
+          );
+          canvas.drawRect(rect, paint);
+        }
+      }
+    }
   }
 
   @override
-  bool shouldRepaint(covariant RoundRect oldDelegate) => false;
+  bool shouldRepaint(covariant WaveformPainter oldDelegate) => false;
 }
 
-class Pubkey2LeadingColor extends StatelessWidget {
-  const Pubkey2LeadingColor({
+class NostrKeyAsWaveform extends StatelessWidget {
+  const NostrKeyAsWaveform({
     super.key,
-    required this.pubkeyHex,
+    required this.hexKey,
     this.height = 10,
+    this.widthFactor = 3.2,
+    this.paddingFactor = 0.5,
     this.color,
-    this.edgeLetterLength = 2,
+    this.edgeLetterLength = 1,
   });
 
-  final String pubkeyHex;
+  final String hexKey;
   final double height;
+  final double widthFactor;
+  final double paddingFactor;
   final Color? color;
   final int edgeLetterLength;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final col = HexToColors.hexToLeadingColor(pubkeyHex);
+    final dark = colorScheme.brightness == Brightness.dark;
+    final waveform = NostrKeyConverter.hexToWaveform(hexKey, dark);
 
     return Row(
       children: [
+        Text(
+          hexKey.substring(0, edgeLetterLength),
+          maxLines: 1,
+          style: TextStyle(
+            fontSize: height,
+            color: color ?? waveform.color,
+          ),
+        ),
         CustomPaint(
-          // size: Size(height * 3.2, height),
-          size: Size(height * 2, height),
-          painter: RoundRect(
-            strokeColor: color ?? colorScheme.onSurfaceVariant,
-            fillColor: col,
+          size: Size(height * widthFactor, height),
+          painter: WaveformPainter(
+            data: waveform.data,
+            color: color ?? waveform.color,
+            padding: paddingFactor,
           ),
         ),
         Text(
-          pubkeyHex.substring(
-              pubkeyHex.length - edgeLetterLength, pubkeyHex.length),
+          hexKey.substring(hexKey.length - edgeLetterLength, hexKey.length),
           maxLines: 1,
           style: TextStyle(
-            fontSize: height * 1.13,
-            color: color ?? colorScheme.onSurfaceVariant,
+            fontSize: height,
+            color: color ?? waveform.color,
           ),
         ),
       ],
@@ -80,8 +109,9 @@ class Pubkey2LeadingColor extends StatelessWidget {
   }
 }
 
-class WaveformPainter extends CustomPainter {
-  const WaveformPainter({
+@Deprecated('version 1')
+class WaveformPainterVer1 extends CustomPainter {
+  const WaveformPainterVer1({
     required this.data,
     required this.color,
     this.punch = false,
@@ -141,48 +171,15 @@ class WaveformPainter extends CustomPainter {
         }
       }
     }
-    // } else {
-    //   const row = 4;
-    //   const col = 8;
-    //   const pad = 0.0;
-    //   final qx = size.width / col;
-    //   final qy = size.height / row;
-    //   final padx = qx * pad;
-    //   final pady = qy * pad;
-
-    //   final paint = Paint()
-    //     ..isAntiAlias = false
-    //     ..color = color
-    //     ..style = PaintingStyle.fill;
-
-    //   for (int yi = 0; yi < row; yi++) {
-    //     for (int xi = 0; xi < col; xi++) {
-    //       final rect = Rect.fromLTRB(
-    //         qx * xi + padx,
-    //         qy * yi + pady,
-    //         qx * xi + qx - padx,
-    //         qy * yi + qy - pady,
-    //       );
-    //       final norm = data[(yi * col) + xi] * 0.5 + 0.5;
-    //       final c = Color.fromARGB(
-    //         255,
-    //         (255 * norm).toInt(),
-    //         (255 * norm).toInt(),
-    //         (255 * norm).toInt(),
-    //       );
-    //       paint.color = c;
-    //       canvas.drawRect(rect, paint);
-    //     }
-    //   }
-    // }
   }
 
   @override
-  bool shouldRepaint(covariant WaveformPainter oldDelegate) => false;
+  bool shouldRepaint(covariant WaveformPainterVer1 oldDelegate) => false;
 }
 
-class Pubkey2Waveform extends StatelessWidget {
-  const Pubkey2Waveform({
+@Deprecated('version 1')
+class NostrKeyAsWaveformVer1 extends StatelessWidget {
+  const NostrKeyAsWaveformVer1({
     super.key,
     required this.pubkeyHex,
     this.height = 10,
@@ -201,7 +198,7 @@ class Pubkey2Waveform extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final dark = colorScheme.brightness == Brightness.dark;
-    final waveform = HexToColors.pubkeyToWaveform(pubkeyHex, dark);
+    final waveform = NostrKeyConverter.hexToWaveform(pubkeyHex, dark);
 
     return Row(
       children: [
@@ -216,7 +213,7 @@ class Pubkey2Waveform extends StatelessWidget {
         CustomPaint(
           // size: Size(height * 3.2, height),
           size: Size(height * 2, height),
-          painter: WaveformPainter(
+          painter: WaveformPainterVer1(
             data: waveform.data,
             color: waveform.color,
             punch: punch,
@@ -228,7 +225,7 @@ class Pubkey2Waveform extends StatelessWidget {
           maxLines: 1,
           style: TextStyle(
             fontSize: height * 1.13,
-            color: colorScheme.onSurfaceVariant,
+            color: color ?? colorScheme.onSurfaceVariant,
           ),
         ),
       ],
@@ -236,9 +233,9 @@ class Pubkey2Waveform extends StatelessWidget {
   }
 }
 
-@Deprecated('use Pubkey2Waveform')
-class Pubkey2Colors extends StatelessWidget {
-  const Pubkey2Colors({
+@Deprecated('deprecated')
+class NostrKeyAsColors extends StatelessWidget {
+  const NostrKeyAsColors({
     super.key,
     required this.pubkeyHex,
     this.height = 5,
@@ -255,7 +252,7 @@ class Pubkey2Colors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = HexToColors.pubkeyToMonochrome(pubkeyHex);
+    final colors = NostrKeyConverter.hexTomono(pubkeyHex);
 
     final series = colors
         .map((c) => ColoredBox(
@@ -294,9 +291,9 @@ class Pubkey2Colors extends StatelessWidget {
   }
 }
 
-@Deprecated('use Pubkey2Waveform')
-class Pubkey2Identicon extends StatelessWidget {
-  const Pubkey2Identicon({
+@Deprecated('deprecated')
+class NostrKeyAsIdenticon extends StatelessWidget {
+  const NostrKeyAsIdenticon({
     super.key,
     required this.pubkeyHex,
     this.height = 5,
@@ -313,7 +310,7 @@ class Pubkey2Identicon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = HexToColors.pubkeyToPattern(pubkeyHex);
+    final colors = NostrKeyConverter.hexToPattern(pubkeyHex);
 
     final series = colors
         .sublist(0, 32)

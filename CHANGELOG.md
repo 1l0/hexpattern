@@ -1,3 +1,7 @@
+## 3.0.0
+
+* New waveform.
+
 ## 2.1.1
 
 * High performance waveform rendering.
