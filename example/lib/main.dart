@@ -115,7 +115,7 @@ class _DemoState extends State<Demo> {
                   ),
                 if (punch)
                   Text(
-                    'Nostr key as punchcard',
+                    'Leading Color',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 Padding(
@@ -146,15 +146,21 @@ class _DemoState extends State<Demo> {
                           hexKey: pubkey!,
                           height: height,
                           color: colScheme.onSurfaceVariant,
+                          paddingFactor: 0.5,
+                          centerPaddingFactor: 1.0,
                         ),
                       if (punch)
-                        NostrKeyAsWaveform(
+                        NostrKeyAsColor(
                           hexKey: pubkey!,
                           height: height,
-                          color: colScheme.onSurfaceVariant,
-                          punch: true,
-                          widthFactor: 2.0,
                         ),
+                      // NostrKeyAsWaveform(
+                      //   hexKey: pubkey!,
+                      //   height: height,
+                      //   color: colScheme.onSurfaceVariant,
+                      //   punch: true,
+                      //   widthFactor: 2.0,
+                      // ),
                       const Spacer(),
                     ],
                   ),
@@ -166,7 +172,7 @@ class _DemoState extends State<Demo> {
                           punch = value;
                         });
                       }),
-                if (pubkey != null && punch) const Text('Punchcard'),
+                if (pubkey != null && punch) const Text('Leading Color'),
                 if (pubkey != null && !punch) const Text('Waveform'),
               ],
             ),

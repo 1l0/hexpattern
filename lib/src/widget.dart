@@ -7,12 +7,14 @@ class WaveformPainter extends CustomPainter {
     required this.data,
     required this.color,
     this.padding = 0.25,
+    this.centerPadding = 0.0,
     this.punch = false,
   }) : assert(data.length == 32);
 
   final List<double> data;
   final Color color;
   final double padding;
+  final double centerPadding;
   final bool punch;
 
   @override
@@ -49,6 +51,7 @@ class WaveformPainter extends CustomPainter {
     const col = 16;
     final qx = size.width / col;
     final padx = qx * padding * 0.5;
+    final cpad = qx * centerPadding * 0.5;
     final baseline = size.height * 0.5;
 
     final paint = Paint()
@@ -62,17 +65,17 @@ class WaveformPainter extends CustomPainter {
         if (yi == 0) {
           final rect = Rect.fromLTRB(
             qx * xi + padx,
-            baseline - (baseline * norm),
+            baseline - (baseline * norm) - cpad,
             qx * xi + qx - padx,
-            baseline,
+            baseline - cpad,
           );
           canvas.drawRect(rect, paint);
         } else {
           final rect = Rect.fromLTRB(
             qx * xi + padx,
-            baseline,
+            baseline + cpad,
             qx * xi + qx - padx,
-            baseline + (baseline * norm),
+            baseline + (baseline * norm) + cpad,
           );
           canvas.drawRect(rect, paint);
         }
@@ -84,6 +87,20 @@ class WaveformPainter extends CustomPainter {
   bool shouldRepaint(covariant WaveformPainter oldDelegate) => false;
 }
 
+class LeadingColorPainter extends CustomPainter {
+  const LeadingColorPainter({
+    required this.color,
+  });
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {}
+
+  @override
+  bool shouldRepaint(covariant LeadingColorPainter oldDelegate) => false;
+}
+
 class NostrKeyAsWaveform extends StatelessWidget {
   const NostrKeyAsWaveform({
     super.key,
@@ -91,6 +108,7 @@ class NostrKeyAsWaveform extends StatelessWidget {
     this.height = 10,
     this.widthFactor = 3.2,
     this.paddingFactor = 0.5,
+    this.centerPaddingFactor = 0.0,
     this.color,
     this.edgeLetterLength = 0,
     this.punch = false,
@@ -100,6 +118,7 @@ class NostrKeyAsWaveform extends StatelessWidget {
   final double height;
   final double widthFactor;
   final double paddingFactor;
+  final double centerPaddingFactor;
   final Color? color;
   final int edgeLetterLength;
   final bool punch;
@@ -126,6 +145,7 @@ class NostrKeyAsWaveform extends StatelessWidget {
             data: waveform.data,
             color: color ?? waveform.color,
             padding: paddingFactor,
+            centerPadding: centerPaddingFactor,
             punch: punch,
           ),
         ),
@@ -154,14 +174,15 @@ class NostrKeyAsColor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).colorScheme.brightness == Brightness.dark;
-    final col = NostrKeyConverter.hexToColor(hexKey, dark);
-    return Container(
-      height: height,
-      width: height,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
+    // final dark = Theme.of(context).colorScheme.brightness == Brightness.dark;
+    // final col = NostrKeyConverter.hexToColor(hexKey, dark);
+    final col = NostrKeyConverter.hexToLeadingColor(hexKey);
+    return Text(
+      '/',
+      style: TextStyle(
         color: col,
+        fontWeight: FontWeight.bold,
+        fontSize: height,
       ),
     );
   }
