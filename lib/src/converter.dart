@@ -64,30 +64,47 @@ class NostrKeyConverter {
     return pattern;
   }
 
-  static WaveForm hexToWaveform(String pubkey, bool dark) {
-    if (pubkey.length != 64) {
-      throw Exception('key length must be 64: ${pubkey.length}');
+  // Hue only
+  static Color hexToColor(String hexKey, bool dark) {
+    if (hexKey.length != 64) {
+      throw Exception('key length must be 64: ${hexKey.length}');
     }
 
-    final c1 = int.parse(pubkey.substring(0, 8), radix: 16);
-    final c2 = int.parse(pubkey.substring(8, 16), radix: 16);
-    final c3 = int.parse(pubkey.substring(16, 24), radix: 16);
-    final c4 = int.parse(pubkey.substring(24, 32), radix: 16);
-    final c5 = int.parse(pubkey.substring(32, 40), radix: 16);
-    final c6 = int.parse(pubkey.substring(40, 48), radix: 16);
-    final c7 = int.parse(pubkey.substring(48, 56), radix: 16);
-    final c8 = int.parse(pubkey.substring(56, 64), radix: 16);
-    final hue = ((c1 + c2 + c3 + c4) % maxHex2Int).toDouble() * hex2IntToHue;
-    final sat = ((c5 + c6 + c7 + c8) % maxHex2Int).toDouble() * hex2IntToSat;
-    final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
+    double sum = 0.0;
+    for (int i = 0; i < 64; i += 2) {
+      final c = hexKey.substring(i, i + 2);
+      final hue = int.parse(c, radix: 16) * hexTohue;
+      sum += hue;
+    }
 
-    final data = List<double>.generate(32, (i) {
-      final target = pubkey.substring(i * 2, i * 2 + 2);
-      final v = int.parse(target, radix: 16).toDouble();
-      return (v / 128.0) - 1.0;
-    }, growable: false);
+    final modHue = (sum % 360.0);
 
-    return WaveForm(data: data, color: color);
+    final light = dark ? 0.5 : 0.3333333;
+
+    return HSLColor.fromAHSL(1.0, modHue, 1.0, light).toColor();
+  }
+
+  static WaveForm hexToWaveform(String hexKey, bool dark) {
+    if (hexKey.length != 64) {
+      throw Exception('key length must be 64: ${hexKey.length}');
+    }
+
+    final List<double> data = [];
+    double sum = 0.0;
+    for (int i = 0; i < 64; i += 2) {
+      final c = hexKey.substring(i, i + 2);
+      final v = int.parse(c, radix: 16);
+
+      final p = (v / 128.0) - 1.0;
+      data.add(p);
+
+      sum += p;
+    }
+    final hue = (sum.abs() * 360.0) % 360.0;
+    final light = dark ? 0.5 : 0.45;
+    final col = HSLColor.fromAHSL(1.0, hue, 1.0, light).toColor();
+
+    return WaveForm(data: data, color: col);
   }
 
   static List<Color> hexToHS(String pubkey) {

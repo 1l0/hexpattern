@@ -49,7 +49,7 @@ class _DemoState extends State<Demo> {
       text: '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e');
 
   String? pubkey;
-  bool chart = false;
+  bool punch = false;
 
   @override
   void initState() {
@@ -100,7 +100,7 @@ class _DemoState extends State<Demo> {
     return Scaffold(
       backgroundColor: colScheme.surface,
       body: LayoutBuilder(builder: (context, constraints) {
-        final height = constraints.maxWidth / 12;
+        final height = constraints.maxWidth / 8;
         final pad = height * 2;
         return Stack(
           children: [
@@ -108,12 +108,12 @@ class _DemoState extends State<Demo> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (!chart)
+                if (!punch)
                   Text(
                     'Nostr key as waveform',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                if (chart)
+                if (punch)
                   Text(
                     'Nostr key as punchcard',
                     style: Theme.of(context).textTheme.headlineSmall,
@@ -141,37 +141,33 @@ class _DemoState extends State<Demo> {
                   Row(
                     children: [
                       const Spacer(),
-                      if (!chart)
+                      if (!punch)
                         NostrKeyAsWaveform(
                           hexKey: pubkey!,
                           height: height,
                           color: colScheme.onSurfaceVariant,
                         ),
-                      if (chart)
-                        NostrKeyAsWaveformVer1(
-                          pubkeyHex: pubkey!,
+                      if (punch)
+                        NostrKeyAsWaveform(
+                          hexKey: pubkey!,
                           height: height,
-                          edgeLetterLength: 1,
+                          color: colScheme.onSurfaceVariant,
                           punch: true,
+                          widthFactor: 2.0,
                         ),
-                      // Pubkey2LeadingColor(
-                      //   pubkeyHex: pubkey!,
-                      //   height: height,
-                      //   edgeLetterLength: 2,
-                      // ),
                       const Spacer(),
                     ],
                   ),
                 if (pubkey != null)
                   Switch(
-                      value: chart,
+                      value: punch,
                       onChanged: (bool value) {
                         setState(() {
-                          chart = value;
+                          punch = value;
                         });
                       }),
-                if (pubkey != null && chart) const Text('Punchcard'),
-                if (pubkey != null && !chart) const Text('Waveform'),
+                if (pubkey != null && punch) const Text('Punchcard'),
+                if (pubkey != null && !punch) const Text('Waveform'),
               ],
             ),
             Row(
