@@ -162,6 +162,38 @@ class NostrKeyAsWaveform extends StatelessWidget {
   }
 }
 
+class NostrKeyAsEightColors extends StatelessWidget {
+  const NostrKeyAsEightColors({
+    super.key,
+    required this.hexKey,
+    this.height = 15,
+  });
+
+  final String hexKey;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    // final dark = Theme.of(context).colorScheme.brightness == Brightness.dark;
+    // final col = NostrKeyConverter.hexToColor(hexKey, dark);
+    final col = NostrKeyConverter.hexToEightColors(hexKey);
+    return Row(
+      children: [
+        for (var i = 0; i < 8; i++)
+          Text(
+            '|',
+            // '∣',
+            style: TextStyle(
+              color: col[i],
+              fontWeight: FontWeight.bold,
+              fontSize: height,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class NostrKeyAsColor extends StatelessWidget {
   const NostrKeyAsColor({
     super.key,

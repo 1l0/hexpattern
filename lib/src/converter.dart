@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 
 const hexTonormal = 0.00392156862745;
 const hexTohue = 1.411764705882352;
-const maxHex4Int = 4294967295;
+const maxInt32 = 4294967295;
 const maxHex3Int = 16777215;
 const maxHex2Int = 65535;
 const hex2IntToHue = 0.005493247882811;
-const hex4IntToHue = 0.000000083819032;
+const max32ToHue = 0.000000083819032;
 const hex2IntToSat = 0.000015259021897;
 
 class NostrKeyConverter {
   static Color hexToLeadingColor(String hex) {
+    if (hex.length != 64) {
+      throw Exception('key length must be 64: ${hex.length}');
+    }
     final c = hex.substring(0, 6);
     return Color(int.parse('FF$c', radix: 16));
   }
@@ -27,6 +30,18 @@ class NostrKeyConverter {
     return colors;
   }
 
+  static List<Color> hexToEightColors(String hex) {
+    if (hex.length != 64) {
+      throw Exception('key length must be 64: ${hex.length}');
+    }
+    return List<Color>.generate(8, (i) {
+      final hue1 = int.parse(hex.substring(i * 8 + 0, i * 8 + 8), radix: 16);
+      // return ((c1 + c2) % maxInt32).toDouble() * int32ToHue;
+      return HSLColor.fromAHSL(1.0, hue1.toDouble() * max32ToHue, 1.0, 0.5)
+          .toColor();
+    }, growable: false);
+  }
+
   static List<Color?> hexToPattern(String pubkey) {
     if (pubkey.length != 64) {
       throw Exception('key length must be 64: ${pubkey.length}');
@@ -36,7 +51,7 @@ class NostrKeyConverter {
       final c1 = int.parse(pubkey.substring(i * 16 + 0, i * 16 + 8), radix: 16);
       final c2 =
           int.parse(pubkey.substring(i * 16 + 8, i * 16 + 16), radix: 16);
-      return ((c1 + c2) % maxHex4Int).toDouble() * hex4IntToHue;
+      return ((c1 + c2) % maxInt32).toDouble() * max32ToHue;
     }, growable: false);
 
     final pattern = List<Color?>.generate(34, (i) {
