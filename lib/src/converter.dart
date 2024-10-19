@@ -99,27 +99,50 @@ class NostrKeyConverter {
     return HSLColor.fromAHSL(1.0, modHue, 1.0, light).toColor();
   }
 
-  static WaveForm hexToWaveform(String hexKey, bool dark) {
+  static Waveform hexToWaveform(String hexKey, bool dark) {
     if (hexKey.length != 64) {
       throw Exception('key length must be 64: ${hexKey.length}');
     }
 
     final List<double> data = [];
     double sum = 0.0;
-    for (int i = 0; i < 64; i += 2) {
-      final c = hexKey.substring(i, i + 2);
-      final v = int.parse(c, radix: 16);
+    for (int i = 0; i < 32; i++) {
+      final v = int.parse(hexKey.substring(i * 2, i * 2 + 2), radix: 16);
 
       final p = (v / 128.0) - 1.0;
       data.add(p);
 
       sum += p;
     }
+    print('data leng: ${data.length}');
     final hue = (sum.abs() * 360.0) % 360.0;
-    final light = dark ? 0.5 : 0.45;
+    final light = dark ? 0.5 : 0.33;
     final col = HSLColor.fromAHSL(1.0, hue, 1.0, light).toColor();
 
-    return WaveForm(data: data, color: col);
+    return Waveform(data: data, color: col);
+  }
+
+  static Waveform hexToWaveformHalf(String hexKey, bool dark) {
+    if (hexKey.length != 64) {
+      throw Exception('key length must be 64: ${hexKey.length}');
+    }
+
+    final List<double> data = [];
+    double sum = 0.0;
+    for (int i = 0; i < 16; i++) {
+      final v = int.parse(hexKey.substring(i * 4, i * 4 + 2), radix: 16);
+      final v2 = int.parse(hexKey.substring(i * 4 + 2, i * 4 + 4), radix: 16);
+      final p = (v / 128.0) - 1.0;
+      final p2 = (v2 / 128.0) - 1.0;
+      data.add(p + p2);
+      sum = sum + p + p2;
+    }
+    print('data leng: ${data.length}');
+    final hue = (sum.abs() * 360.0) % 360.0;
+    final light = dark ? 0.5 : 0.33;
+    final col = HSLColor.fromAHSL(1.0, hue, 1.0, light).toColor();
+
+    return Waveform(data: data, color: col);
   }
 
   static List<Color> hexToHS(String pubkey) {
@@ -164,8 +187,8 @@ class NostrKeyConverter {
   }
 }
 
-class WaveForm {
-  const WaveForm({
+class Waveform {
+  const Waveform({
     required this.data,
     required this.color,
   });

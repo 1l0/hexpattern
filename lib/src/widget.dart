@@ -9,7 +9,7 @@ class WaveformPainter extends CustomPainter {
     this.padding = 0.25,
     this.centerPadding = 0.0,
     this.punch = false,
-  }) : assert(data.length == 32);
+  }) : assert(data.length == 32 || data.length == 16);
 
   final List<double> data;
   final Color color;
@@ -48,7 +48,7 @@ class WaveformPainter extends CustomPainter {
       return;
     }
     const row = 2;
-    const col = 16;
+    final col = (data.length / 2).round();
     final qx = size.width / col;
     final padx = qx * padding * 0.5;
     final cpad = qx * centerPadding * 0.5;
@@ -112,6 +112,7 @@ class NostrKeyAsWaveform extends StatelessWidget {
     this.color,
     this.edgeLetterLength = 0,
     this.punch = false,
+    this.half = true,
   });
 
   final String hexKey;
@@ -122,12 +123,20 @@ class NostrKeyAsWaveform extends StatelessWidget {
   final Color? color;
   final int edgeLetterLength;
   final bool punch;
+  final bool half;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final dark = colorScheme.brightness == Brightness.dark;
-    final waveform = NostrKeyConverter.hexToWaveform(hexKey, dark);
+    late final Waveform waveform;
+    if (half) {
+      waveform = NostrKeyConverter.hexToWaveformHalf(hexKey, dark);
+    } else {
+      waveform = NostrKeyConverter.hexToWaveform(hexKey, dark);
+    }
+    // final width = half ? height * widthFactor * 0.5 : height * widthFactor;
+    final width = height * widthFactor;
 
     return Row(
       children: [
@@ -136,11 +145,11 @@ class NostrKeyAsWaveform extends StatelessWidget {
           maxLines: 1,
           style: TextStyle(
             fontSize: height,
-            color: color ?? colorScheme.onSurface,
+            color: color ?? waveform.color,
           ),
         ),
         CustomPaint(
-          size: Size(height * widthFactor, height),
+          size: Size(width, height),
           painter: WaveformPainter(
             data: waveform.data,
             color: color ?? waveform.color,
@@ -154,7 +163,7 @@ class NostrKeyAsWaveform extends StatelessWidget {
           maxLines: 1,
           style: TextStyle(
             fontSize: height,
-            color: color ?? colorScheme.onSurface,
+            color: color ?? waveform.color,
           ),
         ),
       ],

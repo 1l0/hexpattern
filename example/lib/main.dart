@@ -49,7 +49,7 @@ class _DemoState extends State<Demo> {
       text: '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e');
 
   String? pubkey;
-  bool punch = false;
+  bool half = true;
 
   @override
   void initState() {
@@ -108,16 +108,10 @@ class _DemoState extends State<Demo> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (!punch)
-                  Text(
-                    'Nostr key as waveform',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                if (punch)
-                  Text(
-                    'Leading Color',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+                Text(
+                  'Nostr key as Waveform',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: pad),
                   child: TextField(
@@ -141,39 +135,37 @@ class _DemoState extends State<Demo> {
                   Row(
                     children: [
                       const Spacer(),
-                      if (!punch)
+                      if (!half)
                         NostrKeyAsWaveform(
                           hexKey: pubkey!,
                           height: height,
-                          color: colScheme.onSurfaceVariant,
                           paddingFactor: 0.5,
-                          centerPaddingFactor: 1.0,
+                          // centerPaddingFactor: 1.0,
+                          half: false,
+                          edgeLetterLength: 0,
                         ),
-                      if (punch)
-                        NostrKeyAsColor(
+                      if (half)
+                        NostrKeyAsWaveform(
                           hexKey: pubkey!,
                           height: height,
+                          paddingFactor: 0.5,
+                          // centerPaddingFactor: 1.0,
+                          half: true,
+                          edgeLetterLength: 0,
                         ),
-                      // NostrKeyAsWaveform(
-                      //   hexKey: pubkey!,
-                      //   height: height,
-                      //   color: colScheme.onSurfaceVariant,
-                      //   punch: true,
-                      //   widthFactor: 2.0,
-                      // ),
                       const Spacer(),
                     ],
                   ),
                 if (pubkey != null)
                   Switch(
-                      value: punch,
+                      value: half,
                       onChanged: (bool value) {
                         setState(() {
-                          punch = value;
+                          half = value;
                         });
                       }),
-                if (pubkey != null && punch) const Text('Leading Color'),
-                if (pubkey != null && !punch) const Text('Waveform'),
+                if (pubkey != null && half) const Text('Half'),
+                if (pubkey != null && !half) const Text('Full'),
               ],
             ),
             Row(
