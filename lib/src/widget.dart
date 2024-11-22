@@ -5,14 +5,14 @@ import 'converter.dart';
 class WaveformPainter extends CustomPainter {
   const WaveformPainter({
     required this.data,
-    required this.color,
+    required this.colors,
     this.padding = 0.25,
     this.centerPadding = 0.0,
     this.punch = false,
   }) : assert(data.length == 32 || data.length == 16);
 
   final List<double> data;
-  final Color color;
+  final List<int> colors;
   final double padding;
   final double centerPadding;
   final bool punch;
@@ -29,7 +29,6 @@ class WaveformPainter extends CustomPainter {
 
       final paint = Paint()
         ..isAntiAlias = true
-        ..color = color
         ..style = PaintingStyle.fill;
 
       for (int yi = 0; yi < row; yi++) {
@@ -41,7 +40,7 @@ class WaveformPainter extends CustomPainter {
               qy * yi + qyh,
             ),
             qxh * w,
-            paint,
+            paint..color = Color(colors[(yi * col) + xi]),
           );
         }
       }
@@ -56,7 +55,6 @@ class WaveformPainter extends CustomPainter {
 
     final paint = Paint()
       ..isAntiAlias = false
-      ..color = color
       ..style = PaintingStyle.fill;
 
     for (int yi = 0; yi < row; yi++) {
@@ -69,7 +67,10 @@ class WaveformPainter extends CustomPainter {
             qx * xi + qx - padx,
             baseline - cpad,
           );
-          canvas.drawRect(rect, paint);
+          canvas.drawRect(
+            rect,
+            paint..color = Color(colors[(yi * col) + xi]),
+          );
         } else {
           final rect = Rect.fromLTRB(
             qx * xi + padx,
@@ -77,7 +78,10 @@ class WaveformPainter extends CustomPainter {
             qx * xi + qx - padx,
             baseline + (baseline * norm) + cpad,
           );
-          canvas.drawRect(rect, paint);
+          canvas.drawRect(
+            rect,
+            paint..color = Color(colors[(yi * col) + xi]),
+          );
         }
       }
     }
@@ -87,18 +91,64 @@ class WaveformPainter extends CustomPainter {
   bool shouldRepaint(covariant WaveformPainter oldDelegate) => false;
 }
 
-class LeadingColorPainter extends CustomPainter {
-  const LeadingColorPainter({
+class BarChartPainter extends CustomPainter {
+  const BarChartPainter({
+    required this.data,
+    this.padding = 0.25,
+    this.centerPadding = 0.0,
     required this.color,
-  });
+  }) : assert(data.length >= 2);
 
+  final List<double> data;
+  final double padding;
+  final double centerPadding;
   final Color color;
 
   @override
-  void paint(Canvas canvas, Size size) {}
+  void paint(Canvas canvas, Size size) {
+    const row = 2;
+    final col = (data.length / 2).round();
+    final qx = size.width / col;
+    final padx = qx * padding * 0.5;
+    final cpad = qx * centerPadding * 0.5;
+    final baseline = size.height * 0.5;
+    final paint = Paint()
+      ..isAntiAlias = false
+      ..style = PaintingStyle.fill
+      ..color = color;
+
+    for (int yi = 0; yi < row; yi++) {
+      for (int xi = 0; xi < col; xi++) {
+        final norm = data[(yi * col) + xi];
+        if (yi == 0) {
+          final rect = Rect.fromLTRB(
+            qx * xi + padx,
+            baseline - (baseline * norm) - cpad,
+            qx * xi + qx - padx,
+            baseline - cpad,
+          );
+          canvas.drawRect(
+            rect,
+            paint,
+          );
+        } else {
+          final rect = Rect.fromLTRB(
+            qx * xi + padx,
+            baseline + cpad,
+            qx * xi + qx - padx,
+            baseline + (baseline * norm) + cpad,
+          );
+          canvas.drawRect(
+            rect,
+            paint,
+          );
+        }
+      }
+    }
+  }
 
   @override
-  bool shouldRepaint(covariant LeadingColorPainter oldDelegate) => false;
+  bool shouldRepaint(covariant BarChartPainter oldDelegate) => false;
 }
 
 class NostrKeyAsWaveform extends StatelessWidget {
@@ -106,7 +156,7 @@ class NostrKeyAsWaveform extends StatelessWidget {
     super.key,
     required this.hexKey,
     this.height = 10,
-    this.widthFactor = 3.2,
+    this.widthFactor = 2.0,
     this.paddingFactor = 0.5,
     this.centerPaddingFactor = 0.0,
     this.color,
@@ -150,12 +200,12 @@ class NostrKeyAsWaveform extends StatelessWidget {
         ),
         CustomPaint(
           size: Size(width, height),
-          painter: WaveformPainter(
+          painter: BarChartPainter(
             data: waveform.data,
-            color: color ?? waveform.color,
+            color: color ?? waveform.color ?? colorScheme.onSurfaceVariant,
             padding: paddingFactor,
             centerPadding: centerPaddingFactor,
-            punch: punch,
+            // punch: punch,
           ),
         ),
         Text(

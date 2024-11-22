@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeState>();
     return MaterialApp(
-      title: 'Pubkey to waveform',
+      title: 'Nostr key as Silhouette',
       theme: DemoTheme.light(),
       darkTheme: DemoTheme.dark(),
       themeMode: themeState.themeMode,
@@ -109,7 +109,7 @@ class _DemoState extends State<Demo> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Nostr key as Waveform',
+                  'Nostr key as Silhouette',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 Padding(
@@ -139,33 +139,35 @@ class _DemoState extends State<Demo> {
                         NostrKeyAsWaveform(
                           hexKey: pubkey!,
                           height: height,
-                          paddingFactor: 0.5,
+                          paddingFactor: 0.25,
                           // centerPaddingFactor: 1.0,
                           half: false,
-                          edgeLetterLength: 0,
+                          edgeLetterLength: 2,
+                          color: colScheme.onSurfaceVariant,
                         ),
                       if (half)
                         NostrKeyAsWaveform(
                           hexKey: pubkey!,
                           height: height,
-                          paddingFactor: 0.5,
-                          // centerPaddingFactor: 1.0,
+                          paddingFactor: 0.0,
+                          // centerPaddingFactor: 0.1,
                           half: true,
-                          edgeLetterLength: 0,
+                          edgeLetterLength: 1,
+                          // color: colScheme.onSurfaceVariant,
                         ),
                       const Spacer(),
                     ],
                   ),
-                if (pubkey != null)
-                  Switch(
-                      value: half,
-                      onChanged: (bool value) {
-                        setState(() {
-                          half = value;
-                        });
-                      }),
-                if (pubkey != null && half) const Text('Half'),
-                if (pubkey != null && !half) const Text('Full'),
+                // if (pubkey != null)
+                //   Switch(
+                //       value: half,
+                //       onChanged: (bool value) {
+                //         setState(() {
+                //           half = value;
+                //         });
+                //       }),
+                // if (pubkey != null && half) const Text('Half'),
+                // if (pubkey != null && !half) const Text('Full'),
               ],
             ),
             Row(

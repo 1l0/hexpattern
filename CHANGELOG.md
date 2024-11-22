@@ -1,3 +1,7 @@
+## 4.0.0
+
+* Abandon waveform.
+
 ## 3.0.0
 
 * New waveform.
