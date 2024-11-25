@@ -1,3 +1,7 @@
+## 5.0.1
+
+* Improve description
+
 ## 5.0.0
 
 * Finalize a spec.

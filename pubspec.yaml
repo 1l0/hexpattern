@@ -1,6 +1,6 @@
 name: hexpattern
-description: "Hex Pattern"
-version: 5.0.0
+description: "Hex pattern for Nostr keys"
+version: 5.0.1
 repository: https://github.com/1l0/hexpattern
 
 environment:
