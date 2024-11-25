@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:statescope/statescope.dart';
@@ -181,6 +182,50 @@ class _DemoState extends State<Demo> {
           ],
         );
       }),
+    );
+  }
+}
+
+class HexColor extends StatelessWidget {
+  const HexColor({
+    super.key,
+    required this.hexKey,
+    this.height = 20,
+  });
+
+  final String hexKey;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    final series = HexConverter.hexToPattern(hexKey);
+    final rgb = series.color.toString().substring(10, 16);
+    final hashed = '#$rgb';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          hashed,
+          style: TextStyle(
+            color: series.color,
+            fontWeight: FontWeight.bold,
+            fontSize: height,
+          ),
+        ),
+        IconButton(
+          onPressed: () async {
+            await Clipboard.setData(ClipboardData(text: hashed));
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Copied color code'),
+                ),
+              );
+            }
+          },
+          icon: const FaIcon(FontAwesomeIcons.copy),
+        ),
+      ],
     );
   }
 }
