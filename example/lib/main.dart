@@ -8,6 +8,7 @@ import 'package:nostr_core_dart/nostr.dart';
 import 'package:hexpattern/hexpattern.dart';
 
 const contentColumnWidth = 600.0;
+const title = 'Hex Pattern';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeState>();
     return MaterialApp(
-      title: 'Nostr key as Silhouette',
+      title: title,
       theme: DemoTheme.light(),
       darkTheme: DemoTheme.dark(),
       themeMode: themeState.themeMode,
@@ -49,7 +50,6 @@ class _DemoState extends State<Demo> {
       text: '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e');
 
   String? pubkey;
-  bool half = true;
 
   @override
   void initState() {
@@ -109,13 +109,15 @@ class _DemoState extends State<Demo> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Nostr key as Silhouette',
+                  title,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: pad),
                   child: TextField(
                     controller: textEditingController,
+                    decoration:
+                        const InputDecoration(hintText: 'Public key or npub'),
                     maxLines: 3,
                     minLines: 1,
                     style: const TextStyle(
@@ -127,47 +129,20 @@ class _DemoState extends State<Demo> {
                   Padding(
                     padding: EdgeInsets.all(height / 2),
                     child: Text(
-                      'Invalid pubkey',
+                      'Invalid public key',
                       style: TextStyle(color: colScheme.error),
                     ),
                   ),
                 if (pubkey != null)
-                  Row(
-                    children: [
-                      const Spacer(),
-                      if (!half)
-                        NostrKeyAsWaveform(
-                          hexKey: pubkey!,
-                          height: height,
-                          paddingFactor: 0.25,
-                          // centerPaddingFactor: 1.0,
-                          half: false,
-                          edgeLetterLength: 2,
-                          color: colScheme.onSurfaceVariant,
-                        ),
-                      if (half)
-                        NostrKeyAsWaveform(
-                          hexKey: pubkey!,
-                          height: height,
-                          paddingFactor: 0.0,
-                          // centerPaddingFactor: 0.1,
-                          half: true,
-                          edgeLetterLength: 1,
-                          // color: colScheme.onSurfaceVariant,
-                        ),
-                      const Spacer(),
-                    ],
+                  HexPattern(
+                    hexKey: pubkey!,
+                    height: height,
+                    edgeLetterLength: 1,
                   ),
-                // if (pubkey != null)
-                //   Switch(
-                //       value: half,
-                //       onChanged: (bool value) {
-                //         setState(() {
-                //           half = value;
-                //         });
-                //       }),
-                // if (pubkey != null && half) const Text('Half'),
-                // if (pubkey != null && !half) const Text('Full'),
+                if (pubkey != null)
+                  HexColor(
+                    hexKey: pubkey!,
+                  ),
               ],
             ),
             Row(

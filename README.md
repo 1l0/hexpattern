@@ -1,9 +1,9 @@
 [![pub package](https://img.shields.io/pub/v/hexpattern.svg)](https://pub.dev/packages/hexpattern)
 
-# Nostr key as Silhouette
+# Hex Pattern
 
-A reference implementation of [NUD: Nostr key as Silhouette](NUD-nostrkeyassilhouette.md) (WIP).
+A reference implementation of [NUD: Hex Pattern](NUD-hexpattern.md) (WIP).
 
 [Live demo](https://1l0.github.io/hexpattern/)
 
-![pubkey to identicon](https://github.com/1l0/hexpattern/blob/master/images/nostr_key_as_silhouette.png?raw=true)
+![hex pattern](https://github.com/1l0/hexpattern/blob/master/images/hexpattern.png?raw=true)

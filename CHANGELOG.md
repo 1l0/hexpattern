@@ -1,3 +1,7 @@
+## 5.0.0
+
+* Finalize a spec.
+
 ## 4.0.0
 
 * Abandon waveform.
