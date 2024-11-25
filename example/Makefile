@@ -1,4 +1,4 @@
 .PHONY: build
 
 build:
-	flutter build web --base-href=/hexpattern/ --output=../docs/
+	flutter build web --no-tree-shake-icons --base-href=/hexpattern/ --output=../docs/
