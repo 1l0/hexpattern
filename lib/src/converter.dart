@@ -19,6 +19,26 @@ class HexConverter {
 
     return Pattern(data: data, color: color);
   }
+
+  static Color hexToColor(String hexKey) {
+    if (hexKey.length != 64) {
+      throw Exception('key length must be 64: ${hexKey.length}');
+    }
+
+    double hue = 0;
+    double sat = 0;
+    for (int i = 0; i < 8; i++) {
+      final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
+      final p = v / 4295032831.0;
+      if (i < 4) {
+        hue = (hue + p) % 1.0;
+      } else {
+        sat = (sat + p) % 1.0;
+      }
+    }
+    final color = HSLColor.fromAHSL(1.0, hue * 360.0, sat, 0.5).toColor();
+    return color;
+  }
 }
 
 class Pattern {

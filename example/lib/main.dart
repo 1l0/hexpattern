@@ -198,8 +198,8 @@ class HexColor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final series = HexConverter.hexToPattern(hexKey);
-    final rgb = series.color.toString().substring(10, 16);
+    final color = HexConverter.hexToColor(hexKey);
+    final rgb = color.toString().substring(10, 16);
     final hashed = '#$rgb';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -207,7 +207,7 @@ class HexColor extends StatelessWidget {
         Text(
           hashed,
           style: TextStyle(
-            color: series.color,
+            color: color,
             fontWeight: FontWeight.bold,
             fontSize: height,
           ),
