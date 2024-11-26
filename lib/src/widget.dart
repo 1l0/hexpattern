@@ -72,7 +72,6 @@ class HexPattern extends StatelessWidget {
     this.centerPaddingFactor = 0.0,
     this.color,
     this.edgeLetterLength = 0,
-    this.punch = false,
   });
 
   final String hexKey;
@@ -82,7 +81,6 @@ class HexPattern extends StatelessWidget {
   final double centerPaddingFactor;
   final Color? color;
   final int edgeLetterLength;
-  final bool punch;
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,7 @@
+## 5.1.0
+
+* Optimize color converter
+
 ## 5.0.1
 
 * Improve description
