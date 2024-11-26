@@ -1,3 +1,7 @@
+## 5.1.1
+
+* Tweak demo
+ 
 ## 5.1.0
 
 * Optimize color converter

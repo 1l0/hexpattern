@@ -101,20 +101,24 @@ class _DemoState extends State<Demo> {
     return Scaffold(
       backgroundColor: colScheme.surface,
       body: LayoutBuilder(builder: (context, constraints) {
-        final height = constraints.maxWidth / 8;
-        final pad = height * 2;
+        final height = constraints.maxWidth / 4;
         return Stack(
+          alignment: AlignmentDirectional.topCenter,
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: pad),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  constraints: const BoxConstraints(maxWidth: 556.0),
                   child: TextField(
                     controller: textEditingController,
                     decoration:
@@ -126,9 +130,9 @@ class _DemoState extends State<Demo> {
                     ),
                   ),
                 ),
-                if (pubkey == null)
+                if (pubkey == null && textEditingController.text.isNotEmpty)
                   Padding(
-                    padding: EdgeInsets.all(height / 2),
+                    padding: const EdgeInsets.all(10.0),
                     child: Text(
                       'Invalid public key',
                       style: TextStyle(color: colScheme.error),
