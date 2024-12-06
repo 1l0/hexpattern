@@ -4,7 +4,7 @@
 * @returns {Promise} A Promise that resolves after the delay.
 */
 function addDelay() {
-    return new Promise((resolve) => setTimeout(resolve, 500));
+    return new Promise((resolve) => setTimeout(resolve, 250));
 }
 
 // Get the progress and progressBar elements from the DOM
@@ -14,11 +14,11 @@ const progressBar = document.getElementById("progressbar");
 // Initialize the width of the progress bar to 0%
 progress.style.width = `0%`;
 
-{{flutter_js}}
+{ { flutter_js } }
 
 progress.style.width = `33%`;
 
-{{flutter_build_config}}
+{ { flutter_build_config } }
 
 // Load the Flutter engine
 _flutter.loader.load({
