@@ -14,11 +14,11 @@ const progressBar = document.getElementById("progressbar");
 // Initialize the width of the progress bar to 0%
 progress.style.width = `0%`;
 
-{ { flutter_js } }
+{{flutter_js}}
 
 progress.style.width = `33%`;
 
-{ { flutter_build_config } }
+{{flutter_build_config}}
 
 // Load the Flutter engine
 _flutter.loader.load({
@@ -33,7 +33,7 @@ _flutter.loader.load({
         progressBar.style.width = `100%`;
 
         // Add a delay before running the app to create a smooth crossfade effect.
-        await addDelay();
+        // await addDelay();
 
         // Hide the progress bar by reducing its opacity.
         // This will create the fade out effect by animating the opacity.
