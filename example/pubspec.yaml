@@ -19,6 +19,7 @@ dependencies:
   statescope: ^2.0.1
   url_launcher: ^6.3.0
   nostr_core_dart: ^1.0.1
+  web: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:string_validator/string_validator.dart';
@@ -5,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:statescope/statescope.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:nostr_core_dart/nostr.dart';
+import 'package:web/web.dart' as web;
 
 import 'package:hexpattern/hexpattern.dart';
 
@@ -59,6 +64,7 @@ class _DemoState extends State<Demo> {
     textEditingController.addListener(() {
       validate();
     });
+    unawaited(_getPublicKey());
   }
 
   @override
@@ -94,6 +100,30 @@ class _DemoState extends State<Demo> {
     }
   }
 
+  Future<void> _getPublicKey() async {
+    final nostr = web.window.getProperty('nostr'.toJS).jsify() as JSObject;
+    if (nostr.isUndefinedOrNull) {
+      return;
+    }
+    nostr.callMethod(
+        'on'.toJS,
+        'accountChanged'.toJS,
+        (() {
+          final getPublicKey =
+              nostr.callMethod<JSPromise<JSString>>('getPublicKey'.toJS).toDart;
+          getPublicKey.then((pkjs) {
+            final pkdart = pkjs.toDart;
+            textEditingController.text = pkdart;
+          });
+        }).toJS);
+
+    final getPublicKey =
+        nostr.callMethod<JSPromise<JSString>>('getPublicKey'.toJS).toDart;
+    final pkjs = await getPublicKey;
+    final pkdart = pkjs.toDart;
+    textEditingController.text = pkdart;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colScheme = Theme.of(context).colorScheme;
@@ -118,7 +148,7 @@ class _DemoState extends State<Demo> {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  constraints: const BoxConstraints(maxWidth: 556.0),
+                  constraints: const BoxConstraints(maxWidth: 570.0),
                   child: TextField(
                     controller: textEditingController,
                     decoration:
