@@ -1,3 +1,8 @@
+## 6.0.0
+
+* Change the spec.
+* More randomize.
+
 ## 5.1.1
 
 * Tweak demo
