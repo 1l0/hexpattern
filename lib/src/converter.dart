@@ -8,17 +8,16 @@ class HexConverter {
 
     const double force = 1000.0;
 
-    const double bit16Max = 4295032831.0;
+    const double max = 4294967295.0;
     double h = 0;
     double s = 0;
 
     final List<double> data = [];
     for (int i = 0; i < 8; i++) {
-      /// 16-bit int
       final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
 
       /// normalized v
-      final p = v / bit16Max;
+      final p = v / max;
 
       data.add(p);
 
@@ -42,16 +41,15 @@ class HexConverter {
 
     const double force = 1000.0;
 
-    const double bit16Max = 4295032831.0;
+    const double max = 4294967295.0;
     double h = 0;
     double s = 0;
 
     for (int i = 0; i < 8; i++) {
-      /// 16-bit int
       final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
 
       /// normalized v * force
-      final p = v / bit16Max * force;
+      final p = v / max * force;
 
       if (i.isEven) {
         h += p;
