@@ -8,7 +8,7 @@ class HexConverter {
 
     const double force = 1000.0;
 
-    const double max = 4294967295.0;
+    const double max = 0xFFFFFFFF + 0.0;
     double h = 0;
     double s = 0;
 
@@ -41,7 +41,7 @@ class HexConverter {
 
     const double force = 1000.0;
 
-    const double max = 4294967295.0;
+    const double max = 0xFFFFFFFF + 0.0;
     double h = 0;
     double s = 0;
 

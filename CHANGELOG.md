@@ -1,3 +1,7 @@
+## 7.0.0
+
+* Basic numbers were wrong.
+
 ## 6.0.0
 
 * Change the spec.

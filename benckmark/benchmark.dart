@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flutter/material.dart';
 import 'package:hexpattern/hexpattern.dart';
@@ -7,7 +5,6 @@ import 'package:hexpattern/hexpattern.dart';
 void main() {
   EightFloats.main();
   ThirtyTwoInts.main();
-  exit(0);
 }
 
 const pubkey =
@@ -49,35 +46,28 @@ class ThirtyTwoInts extends BenchmarkBase {
   void teardown() {}
 }
 
-// TODO
+/// adopted some portion from hashbow (https://github.com/supercrabtree/hashbow)
 class HexBenchConverter {
   static Color hexToColor(String hexKey) {
     if (hexKey.length != 64) {
       throw Exception('key length must be 64: ${hexKey.length}');
     }
 
-    const double force = 1000.0;
-
-    const double bit16Max = 4295032831.0;
-    double h = 0;
-    double s = 0;
+    int h = 0;
+    int s = 0;
 
     for (int i = 0; i < 32; i++) {
-      /// 16-bit int
       final v = int.parse(hexKey.substring(i * 2, i * 2 + 2), radix: 16);
 
-      /// normalized v * force
-      final p = v / bit16Max * force;
-
       if (i.isEven) {
-        h += p;
+        h += v;
       } else {
-        s += p;
+        s += v;
       }
     }
 
-    final hue = (h * h) % 1.0 * 360.0;
-    final sat = (s * s) % 1.0;
+    final hue = ((h * h) % 360).toDouble();
+    final sat = ((s * s) % 100).toDouble() * 0.01;
     final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
     return color;
   }
