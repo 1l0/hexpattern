@@ -1,6 +1,6 @@
 name: hexpattern
 description: "Hex pattern for Nostr keys"
-version: 7.0.0
+version: 8.0.0
 repository: https://github.com/1l0/hexpattern
 
 environment:
