@@ -21,7 +21,7 @@ class EightFloats extends BenchmarkBase {
 
   @override
   void run() {
-    HexConverter.hexToColor(pubkey);
+    HexConverter.hexToPattern(pubkey);
   }
 
   @override

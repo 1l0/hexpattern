@@ -232,9 +232,11 @@ class HexColor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = HexConverter.hexToColor(hexKey);
-    final rgb = color.toString().substring(10, 16);
-    final hashed = '#$rgb';
+    final color = HexConverter.hexToPattern(hexKey).color;
+    final r = (color.r * 255.0).toInt().toRadixString(16).padLeft(2, '0');
+    final g = (color.g * 255.0).toInt().toRadixString(16).padLeft(2, '0');
+    final b = (color.b * 255.0).toInt().toRadixString(16).padLeft(2, '0');
+    final hashed = '#$r$g$b';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

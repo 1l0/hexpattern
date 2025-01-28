@@ -6,62 +6,30 @@ class HexConverter {
       throw Exception('key length must be 64: ${hexKey.length}');
     }
 
-    const double force = 1000.0;
-
     const double max = 0xFFFFFFFF + 0.0;
-    double h = 0;
-    double s = 0;
+    double h = 0.0;
+    double s = 0.0;
 
     final List<double> data = [];
     for (int i = 0; i < 8; i++) {
       final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
 
-      /// normalized v
-      final p = v / max;
+      final p = v.toDouble();
 
-      data.add(p);
+      /// normalized p
+      data.add(p / max);
 
       if (i.isEven) {
-        h += p * force;
+        h = ((h + 1.0) * (p + 1.0)) % 360.0;
       } else {
-        s += p * force;
+        s = ((s + 1.0) * (p + 1.0)) % 100.0;
       }
     }
-    final hue = (h * h) % 1.0 * 360.0;
-    final sat = (s * s) % 1.0;
+    final hue = h;
+    final sat = s / 100.0;
     final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
 
     return Pattern(data: data, color: color);
-  }
-
-  static Color hexToColor(String hexKey) {
-    if (hexKey.length != 64) {
-      throw Exception('key length must be 64: ${hexKey.length}');
-    }
-
-    const double force = 1000.0;
-
-    const double max = 0xFFFFFFFF + 0.0;
-    double h = 0;
-    double s = 0;
-
-    for (int i = 0; i < 8; i++) {
-      final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
-
-      /// normalized v * force
-      final p = v / max * force;
-
-      if (i.isEven) {
-        h += p;
-      } else {
-        s += p;
-      }
-    }
-
-    final hue = (h * h) % 1.0 * 360.0;
-    final sat = (s * s) % 1.0;
-    final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
-    return color;
   }
 }
 
