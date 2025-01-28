@@ -2,7 +2,7 @@
 
 # Hex Pattern
 
-A reference implementation of [NUD: Hex Pattern](NUD-hexpattern.md) (WIP).
+A reference implementation of NUD: Hex Pattern (WIP).
 
 [Live demo](https://1l0.github.io/hexpattern/)
 
