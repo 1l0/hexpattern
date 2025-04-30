@@ -1,7 +1,7 @@
 // js snippet
 
 function key2hsl(hexKey) {
-  if (hexKey.length != 64) {
+  if (hexKey.length !== 64) {
     throw new Error("key length must be 64");
   }
   const hcap = BigInt(360);
