@@ -1,3 +1,9 @@
+## 9.0.0
+
+* Change the spec.
+* Use XOR.
+* Ditch the pattern.
+
 ## 8.0.0
 
 * Change the spec.

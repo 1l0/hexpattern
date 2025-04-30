@@ -120,3 +120,32 @@ class HexPattern extends StatelessWidget {
     );
   }
 }
+
+class ColorCircle extends StatelessWidget {
+  const ColorCircle({
+    super.key,
+    required this.hexKey,
+    this.color,
+    this.child,
+    this.height = 300,
+  });
+
+  final String hexKey;
+  final Color? color;
+  final double height;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final col = HexConverter.hexToColor(hexKey);
+    return Container(
+      width: height,
+      height: height,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color ?? col,
+      ),
+      child: child,
+    );
+  }
+}

@@ -2,8 +2,6 @@
 
 # Hex Pattern
 
-A reference implementation of NUD: Hex Pattern (WIP).
+A reference implementation of NUD: Nostr Public Key Color (WIP).
 
 [Live demo](https://1l0.github.io/hexpattern/)
-
-![hex pattern](https://github.com/1l0/hexpattern/blob/master/images/hexpattern.png?raw=true)

@@ -7,29 +7,47 @@ class HexConverter {
     }
 
     const double max = 0xFFFFFFFF + 0.0;
-    double h = 0.0;
-    double s = 0.0;
-
+    int h = 0;
+    int s = 0;
     final List<double> data = [];
+
     for (int i = 0; i < 8; i++) {
       final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
 
-      final p = v.toDouble();
-
-      /// normalized p
-      data.add(p / max);
+      /// add a normal to the data
+      data.add(v.toDouble() / max);
 
       if (i.isEven) {
-        h = ((h + 1.0) * (p + 1.0)) % 360.0;
+        h ^= v;
       } else {
-        s = ((s + 1.0) * (p + 1.0)) % 100.0;
+        s ^= v;
       }
     }
-    final hue = h;
-    final sat = s / 100.0;
+    final hue = h.toDouble() % 360.0;
+    final sat = s.toDouble() % 100.0 * 0.01;
     final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
 
     return Pattern(data: data, color: color);
+  }
+
+  static Color hexToColor(String hexKey) {
+    if (hexKey.length != 64) {
+      throw Exception('key length must be 64: ${hexKey.length}');
+    }
+    int h = 0;
+    int s = 0;
+    for (int i = 0; i < 8; i++) {
+      final v = int.parse(hexKey.substring(i * 8, i * 8 + 8), radix: 16);
+      if (i.isEven) {
+        h ^= v;
+      } else {
+        s ^= v;
+      }
+    }
+    final hue = h.toDouble() % 360.0;
+    final sat = s.toDouble() % 100.0 * 0.01;
+    final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
+    return color;
   }
 }
 

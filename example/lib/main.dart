@@ -14,7 +14,7 @@ import 'package:web/web.dart' as web;
 import 'package:hexpattern/hexpattern.dart';
 
 const contentColumnWidth = 600.0;
-const title = 'Hex Pattern';
+const title = 'Nostr Public Key Color';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,8 +52,7 @@ class Demo extends StatefulWidget {
 
 class _DemoState extends State<Demo> {
   final scrollController = ScrollController();
-  final textEditingController = TextEditingController(
-      text: '3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e');
+  final textEditingController = TextEditingController(text: '');
 
   String? pubkey;
 
@@ -75,17 +74,18 @@ class _DemoState extends State<Demo> {
   }
 
   void validate() {
+    String? output;
     final input = textEditingController.text.trim();
     if (input.startsWith('npub1')) {
-      final decoded = Nip19.decodePubkey(input);
-      if (decoded.isNotEmpty) {
-        textEditingController.text = decoded;
-        setState(() {});
-        return;
+      try {
+        final decoded = Nip19.decodePubkey(input);
+        if (decoded.isNotEmpty) {
+          output = input;
+        }
+      } catch (_) {
+        output = null;
       }
-    }
-    String? output;
-    if (input.length == 64 && isHexadecimal(input)) {
+    } else if (input.length == 64 && isHexadecimal(input)) {
       output = input;
     }
     setState(() {
@@ -101,27 +101,39 @@ class _DemoState extends State<Demo> {
   }
 
   Future<void> _getPublicKey() async {
-    final nostr = web.window.getProperty('nostr'.toJS).jsify() as JSObject;
-    if (nostr.isUndefinedOrNull) {
+    final n = web.window.getProperty('nostr'.toJS).jsify();
+    if (n.isUndefinedOrNull) {
       return;
     }
+    final nostr = n as JSObject;
     nostr.callMethod(
-        'on'.toJS,
-        'accountChanged'.toJS,
-        (() {
-          final getPublicKey =
-              nostr.callMethod<JSPromise<JSString>>('getPublicKey'.toJS).toDart;
-          getPublicKey.then((pkjs) {
-            final pkdart = pkjs.toDart;
-            textEditingController.text = pkdart;
-          });
-        }).toJS);
+      'on'.toJS,
+      'accountChanged'.toJS,
+      (() {
+        final getPublicKey =
+            nostr.callMethod<JSPromise<JSString>>('getPublicKey'.toJS);
+        if (getPublicKey.isUndefinedOrNull) {
+          return;
+        }
+        getPublicKey.toDart.then((pkjs) {
+          if (pkjs.isUndefinedOrNull) {
+            return;
+          }
+          textEditingController.text = pkjs.toDart;
+        });
+      }).toJS,
+    );
 
     final getPublicKey =
-        nostr.callMethod<JSPromise<JSString>>('getPublicKey'.toJS).toDart;
-    final pkjs = await getPublicKey;
-    final pkdart = pkjs.toDart;
-    textEditingController.text = pkdart;
+        nostr.callMethod<JSPromise<JSString>>('getPublicKey'.toJS);
+    if (getPublicKey.isUndefinedOrNull) {
+      return;
+    }
+    final pkjs = await getPublicKey.toDart;
+    if (pkjs.isUndefinedOrNull) {
+      return;
+    }
+    textEditingController.text = pkjs.toDart;
   }
 
   @override
@@ -152,7 +164,7 @@ class _DemoState extends State<Demo> {
                   child: TextField(
                     controller: textEditingController,
                     decoration:
-                        const InputDecoration(hintText: 'Public key or npub'),
+                        const InputDecoration(hintText: 'npub or public key'),
                     maxLines: 3,
                     minLines: 1,
                     style: const TextStyle(
@@ -168,15 +180,18 @@ class _DemoState extends State<Demo> {
                       style: TextStyle(color: colScheme.error),
                     ),
                   ),
+                // if (pubkey != null)
+                //   HexPattern(
+                //     hexKey: pubkey!.forceHex(),
+                //     height: height,
+                //     edgeLetterLength: 1,
+                //   ),
                 if (pubkey != null)
-                  HexPattern(
-                    hexKey: pubkey!,
-                    height: height,
-                    edgeLetterLength: 1,
-                  ),
+                  const Padding(padding: EdgeInsets.all(10.0)),
                 if (pubkey != null)
-                  HexColor(
-                    hexKey: pubkey!,
+                  ColorCode(
+                    hexKey: pubkey!.forceHex(),
+                    height: height * 0.5,
                   ),
               ],
             ),
@@ -220,37 +235,41 @@ class _DemoState extends State<Demo> {
   }
 }
 
-class HexColor extends StatelessWidget {
-  const HexColor({
+class ColorCode extends StatelessWidget {
+  const ColorCode({
     super.key,
     required this.hexKey,
     this.height = 20,
+    this.color,
   });
 
   final String hexKey;
   final double height;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final color = HexConverter.hexToPattern(hexKey).color;
-    final r = (color.r * 255.0).toInt().toRadixString(16).padLeft(2, '0');
-    final g = (color.g * 255.0).toInt().toRadixString(16).padLeft(2, '0');
-    final b = (color.b * 255.0).toInt().toRadixString(16).padLeft(2, '0');
-    final hashed = '#$r$g$b';
+    final col = HexConverter.hexToColor(hexKey);
+    final r = (col.r * 255.0).toInt().toRadixString(16).padLeft(2, '0');
+    final g = (col.g * 255.0).toInt().toRadixString(16).padLeft(2, '0');
+    final b = (col.b * 255.0).toInt().toRadixString(16).padLeft(2, '0');
+    final colorCode = '#$r$g$b';
     return Row(
+      textBaseline: TextBaseline.alphabetic,
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
       children: [
         Text(
-          hashed,
+          colorCode,
           style: TextStyle(
-            color: color,
+            color: color ?? col,
             fontWeight: FontWeight.bold,
             fontSize: height,
           ),
         ),
         IconButton(
           onPressed: () async {
-            await Clipboard.setData(ClipboardData(text: hashed));
+            await Clipboard.setData(ClipboardData(text: colorCode));
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -259,10 +278,33 @@ class HexColor extends StatelessWidget {
               );
             }
           },
-          icon: const FaIcon(FontAwesomeIcons.copy),
+          icon: FaIcon(
+            FontAwesomeIcons.copy,
+            color: color,
+          ),
         ),
       ],
     );
+  }
+}
+
+extension ForceHex on String {
+  String forceHex() {
+    if (startsWith('npub1')) {
+      String? output;
+      try {
+        final decoded = Nip19.decodePubkey(this);
+        if (decoded.isNotEmpty) {
+          output = decoded;
+        }
+      } catch (_) {
+        return this;
+      }
+      if (output != null) {
+        return output;
+      }
+    }
+    return this;
   }
 }
 
