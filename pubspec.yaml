@@ -1,6 +1,6 @@
 name: hexpattern
 description: "Nostr Public Key Color"
-version: 9.0.0
+version: 9.0.1
 repository: https://github.com/1l0/hexpattern
 
 environment:

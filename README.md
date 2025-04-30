@@ -1,6 +1,6 @@
 [![pub package](https://img.shields.io/pub/v/hexpattern.svg)](https://pub.dev/packages/hexpattern)
 
-# Hex Pattern
+# Nostr Public Key Color
 
 A reference implementation of NUD: Nostr Public Key Color (WIP).
 

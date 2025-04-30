@@ -14,7 +14,7 @@ import 'package:web/web.dart' as web;
 import 'package:hexpattern/hexpattern.dart';
 
 const contentColumnWidth = 600.0;
-const title = 'Nostr Public Key Color';
+const title = 'Public Key Color';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

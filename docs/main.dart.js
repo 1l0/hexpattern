@@ -34920,7 +34920,7 @@ P(a){var s,r=t.bk,q=a.an(t.F8)
 if(q==null)A.aG(A.cE("["+A.br(r).k(0)+"] not found in context. Ensure that the ["+A.br(r).k(0)+u.H+A.br(r).k(0)+u.W))
 s=q.f
 if(s==null)s=q.x.$0()
-return new A.vB(B.AC,"Nostr Public Key Color",A.amr(B.zb),A.amr(B.za),s.a,!1,null)}}
+return new A.vB(B.AC,"Public Key Color",A.amr(B.zb),A.amr(B.za),s.a,!1,null)}}
 A.u7.prototype={
 ag(){var s=A.ahb()
 return new A.yU(s,new A.Ic(new A.ce("",B.h_,B.aW),$.aj()))}}
@@ -34980,7 +34980,7 @@ A.a92.prototype={
 $1(a){this.a.e.sfI(0,a)},
 $S:83}
 A.a95.prototype={
-$2(a,b){var s,r=null,q=A.iq("Nostr Public Key Color",r,r,r,A.ab(a).p1.d,r,r),p=this.a,o=p.e,n=t.F
+$2(a,b){var s,r=null,q=A.iq("Public Key Color",r,r,r,A.ab(a).p1.d,r,r),p=this.a,o=p.e,n=t.F
 q=A.c([new A.cJ(B.lc,q,r),A.aga(new A.xP(o,B.C0,B.jm,B.O9,B.JX,B.JY,3,1,!0,r),B.N,B.xZ,r,r,r,B.Bh,r)],n)
 if(p.f==null&&o.a.a.length!==0)q.push(new A.cJ(B.lb,A.iq("Invalid public key",r,r,r,A.fS(r,r,this.b.fy,r,r,r,r,r,r,r,r,r,r,r,r,r,r,!0,r,r,r,r,r,r,r,r),r,r),r))
 if(p.f!=null)q.push(B.GR)
