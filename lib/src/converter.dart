@@ -52,6 +52,27 @@ class HexConverter {
     final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
     return color;
   }
+
+  static Color hexToColorOptimized(String hexKey) {
+    if (hexKey.length != 64) {
+      throw Exception('key length must be 64: ${hexKey.length}');
+    }
+    final h1 = int.parse(hexKey.substring(0, 8), radix: 16);
+    final s1 = int.parse(hexKey.substring(8, 16), radix: 16);
+    final h2 = int.parse(hexKey.substring(16, 24), radix: 16);
+    final s2 = int.parse(hexKey.substring(24, 32), radix: 16);
+    final h3 = int.parse(hexKey.substring(32, 40), radix: 16);
+    final s3 = int.parse(hexKey.substring(40, 48), radix: 16);
+    final h4 = int.parse(hexKey.substring(48, 56), radix: 16);
+    final s4 = int.parse(hexKey.substring(56, 64), radix: 16);
+    int h = h1 ^ h2 ^ h3 ^ h4;
+    int s = s1 ^ s2 ^ s3 ^ s4;
+    final hue = h.toDouble() % 360.0;
+    final rawSat = s.toDouble() % 100.0 * 0.01;
+    final sat = sin(pi * (rawSat * 0.5));
+    final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
+    return color;
+  }
 }
 
 class Pattern {

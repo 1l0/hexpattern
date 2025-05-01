@@ -249,7 +249,7 @@ class ColorCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final col = HexConverter.hexToColor(hexKey);
+    final col = HexConverter.hexToColorOptimized(hexKey);
     final r = (col.r * 255.0).toInt().toRadixString(16).padLeft(2, '0');
     final g = (col.g * 255.0).toInt().toRadixString(16).padLeft(2, '0');
     final b = (col.b * 255.0).toInt().toRadixString(16).padLeft(2, '0');
