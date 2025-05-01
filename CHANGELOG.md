@@ -1,3 +1,8 @@
+## 10.0.0
+
+* Change the spec.
+* Increase the saturation.
+
 ## 9.0.1
 
 * Fix readme.

@@ -22042,7 +22042,7 @@ if(o!==64)throw A.f(A.cE("key length must be 64: "+o))
 for(s=0,r=0,q=0;q<8;++q){o=q*8
 p=A.hJ(B.d.a0(a,o,o+8),16)
 if((q&1)===0)s=(s^p)>>>0
-else r=(r^p)>>>0}return new A.uU(1,B.i.bn(s,360),B.i.bn(r,100)*0.01,0.5).Pp()},
+else r=(r^p)>>>0}return new A.uU(1,B.i.bn(s,360),Math.sin(3.141592653589793*(B.i.bn(r,100)*0.01*0.5)),0.5).Pp()},
 mf(a,b){a=A.a0b(0,100,a)
 b=A.a0b(0,100,b)
 return A.agb(A.mc(a),A.mc(b))},

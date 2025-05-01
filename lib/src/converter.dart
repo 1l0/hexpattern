@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class HexConverter {
   static Pattern hexToPattern(String hexKey) {
@@ -24,7 +25,8 @@ class HexConverter {
       }
     }
     final hue = h.toDouble() % 360.0;
-    final sat = s.toDouble() % 100.0 * 0.01;
+    final rawSat = s.toDouble() % 100.0 * 0.01;
+    final sat = sin(pi * (rawSat * 0.5));
     final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
 
     return Pattern(data: data, color: color);
@@ -45,7 +47,8 @@ class HexConverter {
       }
     }
     final hue = h.toDouble() % 360.0;
-    final sat = s.toDouble() % 100.0 * 0.01;
+    final rawSat = s.toDouble() % 100.0 * 0.01;
+    final sat = sin(pi * (rawSat * 0.5));
     final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
     return color;
   }

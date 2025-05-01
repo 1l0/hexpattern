@@ -16,8 +16,9 @@ function key2hsl(hexKey) {
       s ^= v;
     }
   }
-  let hue = h % hcap;
-  let sat = s % scap;
+  let hue = Number(h % hcap);
+  let rawSat = Number(s % scap);
+  let sat = Math.sin(Math.PI * (rawSat * 0.005)) * 100;
   return {
     hue: hue,
     sat: sat,
@@ -26,4 +27,6 @@ function key2hsl(hexKey) {
 }
 
 let hsl = key2hsl("3c7d12a6c2f71fe9ca2527216f529a137bb0f2eb018b18f30003933b9532013e");
-document.body.style.backgroundColor = "hsl(" + hsl.hue + ", " + hsl.sat + "%, " + hsl.lit + "%)";
+let col = "hsl(" + hsl.hue + ", " + hsl.sat + "%, " + hsl.lit + "%)";
+document.body.textContent = col;
+document.body.style.backgroundColor = col;
