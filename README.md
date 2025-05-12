@@ -4,4 +4,6 @@
 
 A reference implementation of NUD: Nostr Public Key Color (WIP).
 
-[Live demo](https://1l0.github.io/hexpattern/)
+[Flutter live demo](https://1l0.github.io/hexpattern/)
+
+[jsfiddle](https://jsfiddle.net/rq58zgn4/)
