@@ -7,9 +7,10 @@ class HexConverter {
       throw Exception('key length must be 64: ${hexKey.length}');
     }
 
+    final start = Color(int.parse('FF${hexKey.substring(0, 6)}', radix: 16));
+    final end = Color(int.parse('FF${hexKey.substring(58, 64)}', radix: 16));
+
     const double max = 0xFFFFFFFF + 0.0;
-    int h = 0;
-    int s = 0;
     final List<double> data = [];
 
     for (int i = 0; i < 8; i++) {
@@ -17,19 +18,8 @@ class HexConverter {
 
       /// add a normal to the data
       data.add(v.toDouble() / max);
-
-      if (i.isEven) {
-        h ^= v;
-      } else {
-        s ^= v;
-      }
     }
-    final hue = h.toDouble() % 360.0;
-    final rawSat = s.toDouble() % 100.0 * 0.01;
-    final sat = sin(pi * (rawSat * 0.5));
-    final color = HSLColor.fromAHSL(1.0, hue, sat, 0.5).toColor();
-
-    return Pattern(data: data, color: color);
+    return Pattern(data: data, start: start, end: end);
   }
 
   static Color hexToColor(String hexKey) {
@@ -78,8 +68,10 @@ class HexConverter {
 class Pattern {
   const Pattern({
     required this.data,
-    required this.color,
+    required this.start,
+    required this.end,
   });
   final List<double> data;
-  final Color color;
+  final Color start;
+  final Color end;
 }

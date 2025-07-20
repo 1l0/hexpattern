@@ -1,19 +1,66 @@
+import 'dart:ui' as ui;
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import 'converter.dart';
 
+class OctagonPainter extends CustomPainter {
+  const OctagonPainter({
+    required this.data,
+    required this.start,
+    required this.end,
+  }) : assert(data.length >= 2);
+
+  final List<double> data;
+  final Color start;
+  final Color end;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final seg = 2.0 / data.length;
+    final distance = size.height * 0.5;
+    final paint = Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill
+      // ..color = color
+      ..shader = ui.Gradient.linear(
+        Offset(size.width / 2, 0),
+        Offset(size.width / 2, size.height),
+        [start, end],
+      );
+    final center = Offset(size.width / 2, size.height / 2);
+    final zero = center + Offset.fromDirection(0, distance * data.elementAt(0));
+
+    Path path = Path();
+    path.moveTo(zero.dx, zero.dy);
+    for (int i = 1; i < data.length; i++) {
+      final offset = center +
+          Offset.fromDirection(math.pi * seg * i, distance * data.elementAt(i));
+      path.lineTo(offset.dx, offset.dy);
+    }
+    path.lineTo(zero.dx, zero.dy);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant OctagonPainter oldDelegate) => false;
+}
+
 class PatternPainter extends CustomPainter {
   const PatternPainter({
     required this.data,
-    this.padding = 0.25,
+    this.padding = 0.0,
     this.centerPadding = 0.0,
-    required this.color,
+    required this.start,
+    required this.end,
   }) : assert(data.length >= 2);
 
   final List<double> data;
   final double padding;
   final double centerPadding;
-  final Color color;
+  final Color start;
+  final Color end;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -26,7 +73,11 @@ class PatternPainter extends CustomPainter {
     final paint = Paint()
       ..isAntiAlias = false
       ..style = PaintingStyle.fill
-      ..color = color;
+      ..shader = ui.Gradient.linear(
+        Offset(0, size.height / 2),
+        Offset(size.width, size.height / 2),
+        [start, end],
+      );
 
     for (int yi = 0; yi < row; yi++) {
       for (int xi = 0; xi < col; xi++) {
@@ -67,10 +118,11 @@ class HexPattern extends StatelessWidget {
     super.key,
     required this.hexKey,
     this.height = 10,
-    this.widthFactor = 2.0,
+    this.widthFactor = 1.0,
     this.paddingFactor = 0.0,
     this.centerPaddingFactor = 0.0,
-    this.color,
+    this.start,
+    this.end,
     this.edgeLetterLength = 0,
   });
 
@@ -79,7 +131,8 @@ class HexPattern extends StatelessWidget {
   final double widthFactor;
   final double paddingFactor;
   final double centerPaddingFactor;
-  final Color? color;
+  final Color? start;
+  final Color? end;
   final int edgeLetterLength;
 
   @override
@@ -96,16 +149,15 @@ class HexPattern extends StatelessWidget {
           maxLines: 1,
           style: TextStyle(
             fontSize: height,
-            color: color ?? pattern.color,
+            color: start ?? pattern.start,
           ),
         ),
         CustomPaint(
           size: Size(width, height),
-          painter: PatternPainter(
+          painter: OctagonPainter(
             data: pattern.data,
-            color: color ?? pattern.color,
-            padding: paddingFactor,
-            centerPadding: centerPaddingFactor,
+            start: start ?? pattern.start,
+            end: end ?? pattern.end,
           ),
         ),
         Text(
@@ -113,7 +165,7 @@ class HexPattern extends StatelessWidget {
           maxLines: 1,
           style: TextStyle(
             fontSize: height,
-            color: color ?? pattern.color,
+            color: end ?? pattern.end,
           ),
         ),
       ],
