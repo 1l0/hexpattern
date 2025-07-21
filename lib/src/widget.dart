@@ -18,7 +18,8 @@ class OctagonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final seg = 2.0 / data.length;
+    final seg = (2.0 / data.length) * math.pi;
+    final segHalf = seg * 0.5;
     final distance = size.height * 0.5;
     final paint = Paint()
       ..isAntiAlias = true
@@ -30,13 +31,14 @@ class OctagonPainter extends CustomPainter {
         [start, end],
       );
     final center = Offset(size.width / 2, size.height / 2);
-    final zero = center + Offset.fromDirection(0, distance * data.elementAt(0));
+    final zero =
+        center + Offset.fromDirection(segHalf, distance * data.elementAt(0));
 
     Path path = Path();
     path.moveTo(zero.dx, zero.dy);
     for (int i = 1; i < data.length; i++) {
       final offset = center +
-          Offset.fromDirection(math.pi * seg * i, distance * data.elementAt(i));
+          Offset.fromDirection(seg * i + segHalf, distance * data.elementAt(i));
       path.lineTo(offset.dx, offset.dy);
     }
     path.lineTo(zero.dx, zero.dy);
