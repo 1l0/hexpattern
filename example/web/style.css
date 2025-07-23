@@ -5,14 +5,15 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #fff;
+    color: #828282;
+    background-color: rgb(0, 0, 0);
 }
 
 /* Styles for the progress bar container */
 .progress-container {
     width: 300px;
     height: 8px;
-    background-color: #e0e0e0;
+    background-color: #282828;
     border-radius: 10px;
     overflow: hidden;
     transition: opacity 0.25s ease-out;
@@ -22,10 +23,26 @@ body {
 .progress-bar {
     display: block;
     height: 100%;
-    background-color: #6a6a6a;
+    background-color: #818181;
     width: 0;
     transition: width 0.5s ease;
 }
+
+@media (prefers-color-scheme: light) {
+    body {
+        color: #000;
+        background-color: rgb(255, 255, 255);
+    }
+
+    .progress-container {
+        background-color: #e0e0e0;
+    }
+
+    .progress-bar {
+        background-color: #6a6a6a;
+    }
+}
+
 
 /* CSS for a fade-in animation */
 .fade-in {

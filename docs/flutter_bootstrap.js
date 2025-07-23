@@ -53,7 +53,7 @@ progress.style.width = `33%`;
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"8cd19e509d6bece8ccd74aef027c4ca947363095","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
+_flutter.buildConfig = {"engineRevision":"39d6d6e699e51b2874210e14cddf1a22fb9524b2","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
 
 
 // Load the Flutter engine

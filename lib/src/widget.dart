@@ -16,6 +16,7 @@ class OctagonPainter extends CustomPainter {
   final Color start;
   final Color end;
 
+  // TODO: use canvas.drawVertices? maybe not
   @override
   void paint(Canvas canvas, Size size) {
     final seg = (2.0 / data.length) * math.pi;
@@ -49,6 +50,7 @@ class OctagonPainter extends CustomPainter {
   bool shouldRepaint(covariant OctagonPainter oldDelegate) => false;
 }
 
+@Deprecated('use OctagonPainter')
 class PatternPainter extends CustomPainter {
   const PatternPainter({
     required this.data,
@@ -121,20 +123,24 @@ class HexPattern extends StatelessWidget {
     required this.hexKey,
     this.height = 10,
     this.widthFactor = 1.0,
-    this.paddingFactor = 0.0,
-    this.centerPaddingFactor = 0.0,
     this.start,
     this.end,
-    this.edgeLetterLength = 0,
+    @Deprecated('will be removed') this.paddingFactor = 0.0,
+    @Deprecated('will be removed') this.centerPaddingFactor = 0.0,
+    @Deprecated('will be removed') this.edgeLetterLength = 0,
   });
 
   final String hexKey;
   final double height;
   final double widthFactor;
-  final double paddingFactor;
-  final double centerPaddingFactor;
   final Color? start;
   final Color? end;
+
+  @Deprecated('will be removed')
+  final double paddingFactor;
+  @Deprecated('will be removed')
+  final double centerPaddingFactor;
+  @Deprecated('will be removed')
   final int edgeLetterLength;
 
   @override

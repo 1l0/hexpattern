@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:statescope/statescope.dart';
@@ -13,8 +13,8 @@ import 'package:web/web.dart' as web;
 
 import 'package:hexpattern/hexpattern.dart';
 
-const contentColumnWidth = 600.0;
-const title = 'Public Key Color';
+const contentColumnWidth = 620.0;
+const title = 'nostr pubkey shape';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -142,148 +142,90 @@ class _DemoState extends State<Demo> {
     final isDarkMode = colScheme.brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: colScheme.surface,
-      body: LayoutBuilder(builder: (context, constraints) {
-        final height = constraints.maxWidth / 4;
-        return Stack(
-          alignment: AlignmentDirectional.topCenter,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  constraints: const BoxConstraints(maxWidth: 570.0),
-                  child: TextField(
-                    controller: textEditingController,
-                    decoration:
-                        const InputDecoration(hintText: 'npub or public key'),
-                    maxLines: 3,
-                    minLines: 1,
-                    style: const TextStyle(
-                      fontSize: 13.9,
-                    ),
-                  ),
-                ),
-                if (pubkey == null && textEditingController.text.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Invalid public key',
-                      style: TextStyle(color: colScheme.error),
-                    ),
-                  ),
-                // if (pubkey != null)
-                //   HexPattern(
-                //     hexKey: pubkey!.forceHex(),
-                //     height: height,
-                //     edgeLetterLength: 1,
-                //   ),
-                if (pubkey != null)
-                  const Padding(padding: EdgeInsets.all(10.0)),
-                if (pubkey != null)
-                  ColorCode(
+      body: Stack(
+        children: [
+          if (pubkey != null)
+            Center(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return HexPattern(
                     hexKey: pubkey!.forceHex(),
-                    height: height * 0.5,
-                  ),
-              ],
+                    height:
+                        math.min(constraints.maxWidth, constraints.maxHeight),
+                    start: colScheme.onSurface,
+                    end: colScheme.onSurfaceVariant,
+                  );
+                },
+              ),
             ),
-            Row(
-              children: [
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 5.0,
-                    runSpacing: 5.0,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          final themeState = context.read<ThemeState>();
-                          if (isDarkMode) {
-                            themeState.toLight();
-                            return;
-                          }
-                          themeState.toDark();
-                        },
-                        icon: isDarkMode
-                            ? const FaIcon(Icons.light_mode)
-                            : const FaIcon(Icons.dark_mode),
-                      ),
-                      IconButton(
-                        onPressed: goToRepo,
-                        icon: const FaIcon(FontAwesomeIcons.github),
-                      ),
-                    ],
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: Text(
+                  title,
+                  style: TextStyle(
+                    color: colScheme.primary,
                   ),
                 ),
-              ],
-            ),
-          ],
-        );
-      }),
-    );
-  }
-}
-
-class ColorCode extends StatelessWidget {
-  const ColorCode({
-    super.key,
-    required this.hexKey,
-    this.height = 20,
-    this.color,
-  });
-
-  final String hexKey;
-  final double height;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    final col = HexConverter.hexToColorOptimized(hexKey);
-    final r = (col.r * 255.0).toInt().toRadixString(16).padLeft(2, '0');
-    final g = (col.g * 255.0).toInt().toRadixString(16).padLeft(2, '0');
-    final b = (col.b * 255.0).toInt().toRadixString(16).padLeft(2, '0');
-    final colorCode = '#$r$g$b';
-    return Row(
-      textBaseline: TextBaseline.alphabetic,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      children: [
-        Text(
-          colorCode,
-          style: TextStyle(
-            color: color ?? col,
-            fontWeight: FontWeight.bold,
-            fontSize: height,
-          ),
-        ),
-        IconButton(
-          onPressed: () async {
-            await Clipboard.setData(ClipboardData(text: colorCode));
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Copied color code'),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      final themeState = context.read<ThemeState>();
+                      if (isDarkMode) {
+                        themeState.toLight();
+                        return;
+                      }
+                      themeState.toDark();
+                    },
+                    icon: isDarkMode
+                        ? const FaIcon(Icons.light_mode)
+                        : const FaIcon(Icons.dark_mode),
+                  ),
+                  IconButton(
+                    onPressed: goToRepo,
+                    icon: const FaIcon(FontAwesomeIcons.github),
+                  ),
+                ],
+              ),
+              SliverToBoxAdapter(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxWidth: contentColumnWidth,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                      child: TextField(
+                        controller: textEditingController,
+                        decoration: const InputDecoration(
+                          hintText: 'npub or public key',
+                        ),
+                        maxLines: 3,
+                        minLines: 1,
+                        // style: const TextStyle(
+                        //   fontSize: 13.9,
+                        // ),
+                      ),
+                    ),
+                  ),
                 ),
-              );
-            }
-          },
-          icon: FaIcon(
-            FontAwesomeIcons.copy,
-            color: color,
+              ),
+              if (pubkey == null && textEditingController.text.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
+                    child: Center(
+                      child: Text(
+                        'Invalid public key',
+                        style: TextStyle(color: colScheme.error),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -331,7 +273,7 @@ class DemoTheme {
         onSecondaryContainer: Color.fromARGB(255, 255, 255, 255),
         tertiaryContainer: Color.fromARGB(255, 64, 64, 64),
         onTertiaryContainer: Color.fromARGB(255, 168, 168, 168),
-        surface: Color.fromARGB(255, 29, 29, 29),
+        surface: Color.fromARGB(255, 0, 0, 0),
         surfaceBright: Color.fromARGB(255, 41, 41, 41),
         surfaceContainer: Color.fromARGB(255, 29, 29, 29),
         onSurface: Color.fromARGB(255, 216, 216, 216),

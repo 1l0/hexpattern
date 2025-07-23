@@ -1,6 +1,6 @@
 name: hexpattern
-description: "Nostr Public Key Color"
-version: 10.0.0
+description: "nostr pubkey shape"
+version: 12.0.0
 repository: https://github.com/1l0/hexpattern
 
 environment:

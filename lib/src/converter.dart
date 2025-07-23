@@ -22,6 +22,7 @@ class HexConverter {
     return Pattern(data: data, start: start, end: end);
   }
 
+  @Deprecated('use hexToPattern')
   static Color hexToColor(String hexKey) {
     if (hexKey.length != 64) {
       throw Exception('key length must be 64: ${hexKey.length}');
@@ -43,6 +44,7 @@ class HexConverter {
     return color;
   }
 
+  @Deprecated('use hexToPattern')
   static Color hexToColorOptimized(String hexKey) {
     if (hexKey.length != 64) {
       throw Exception('key length must be 64: ${hexKey.length}');

@@ -1,3 +1,7 @@
+## 12.0.0
+
+* breaking: use shape instead of color.
+
 ## 10.0.0
 
 * Change the spec.
