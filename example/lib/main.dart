@@ -151,7 +151,8 @@ class _DemoState extends State<Demo> {
                   return HexPattern(
                     hexKey: pubkey!.forceHex(),
                     height:
-                        math.min(constraints.maxWidth, constraints.maxHeight),
+                        math.min(constraints.maxWidth, constraints.maxHeight) *
+                            0.9,
                     start: colScheme.onSurface,
                     end: colScheme.onSurfaceVariant,
                   );

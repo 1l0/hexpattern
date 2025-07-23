@@ -35749,7 +35749,8 @@ s=Math.min(b.b,b.d)
 r=this.b
 q=r.k3
 r=r.rx
-return new A.pw(p,s,q,r==null?q:r,null)},
+if(r==null)r=q
+return new A.pw(p,s*0.9,q,r,null)},
 $S:252}
 A.aaW.prototype={
 $0(){var s,r=t.bk,q=this.a.wR(t.F8)
