@@ -20,23 +20,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     StateScope(
-      creator: () => ThemeState(),
-      child: const MyApp(),
+      creator: () => AppConfig(),
+      child: const App(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final themeState = context.watch<ThemeState>();
+    final settings = context.watch<AppConfig>();
     return MaterialApp(
       title: title,
       theme: DemoTheme.light(),
       darkTheme: DemoTheme.dark(),
-      themeMode: themeState.themeMode,
+      themeMode: settings.themeMode,
       debugShowCheckedModeBanner: false,
       home: const Demo(),
     );
@@ -152,9 +152,10 @@ class _DemoState extends State<Demo> {
                     hexKey: pubkey!.forceHex(),
                     height:
                         math.min(constraints.maxWidth, constraints.maxHeight) *
-                            0.9,
+                            0.5,
                     start: colScheme.onSurface,
                     end: colScheme.onSurfaceVariant,
+                    strokeWeight: 0.5,
                   );
                 },
               ),
@@ -171,7 +172,7 @@ class _DemoState extends State<Demo> {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      final themeState = context.read<ThemeState>();
+                      final themeState = context.read<AppConfig>();
                       if (isDarkMode) {
                         themeState.toLight();
                         return;
@@ -251,8 +252,9 @@ extension ForceHex on String {
   }
 }
 
-class ThemeState extends ChangeNotifier {
+class AppConfig extends ChangeNotifier {
   ThemeMode themeMode = ThemeMode.system;
+  PatternType patternType = PatternType.pattern;
 
   void toDark() {
     themeMode = ThemeMode.dark;
@@ -263,6 +265,18 @@ class ThemeState extends ChangeNotifier {
     themeMode = ThemeMode.light;
     notifyListeners();
   }
+
+  void togglePatternType() {
+    patternType = patternType == PatternType.pattern
+        ? PatternType.pattern32
+        : PatternType.pattern;
+    notifyListeners();
+  }
+}
+
+enum PatternType {
+  pattern,
+  pattern32,
 }
 
 class DemoTheme {

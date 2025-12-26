@@ -1,3 +1,7 @@
+## 13.0.0
+
+* breaking: new shape like XY oscilloscope.
+
 ## 12.0.0
 
 * breaking: use shape instead of color.

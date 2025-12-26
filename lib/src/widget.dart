@@ -5,116 +5,56 @@ import 'package:flutter/material.dart';
 
 import 'converter.dart';
 
-class OctagonPainter extends CustomPainter {
-  const OctagonPainter({
+class OscilloscopePainter extends CustomPainter {
+  const OscilloscopePainter({
     required this.data,
     required this.start,
     required this.end,
+    required this.strokeWeight,
   }) : assert(data.length >= 2);
 
   final List<double> data;
   final Color start;
   final Color end;
+  final double strokeWeight;
 
-  // TODO: use canvas.drawVertices? maybe not
   @override
   void paint(Canvas canvas, Size size) {
-    final seg = (2.0 / data.length) * math.pi;
-    final segHalf = seg * 0.5;
-    final distance = size.height * 0.5;
+    final sep = (data.length / 2).round();
+    final rawScale = math.min(size.width, size.height);
+    final strokeWidth = rawScale / sep * strokeWeight;
+    final scale = rawScale - strokeWidth * 2;
     final paint = Paint()
       ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      // ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.miter
+      ..strokeMiterLimit = 10.0
       ..shader = ui.Gradient.linear(
         Offset(size.width / 2, 0),
         Offset(size.width / 2, size.height),
         [start, end],
       );
-    final center = Offset(size.width / 2, size.height / 2);
-    final zero =
-        center + Offset.fromDirection(segHalf, distance * data.elementAt(0));
-
+    final epoch = Offset(
+      data.elementAt(0) * scale + strokeWidth,
+      data.elementAt(sep) * scale + strokeWidth,
+    );
     Path path = Path();
-    path.moveTo(zero.dx, zero.dy);
-    for (int i = 1; i < data.length; i++) {
-      final offset = center +
-          Offset.fromDirection(seg * i + segHalf, distance * data.elementAt(i));
+    path.moveTo(epoch.dx, epoch.dy);
+    for (int i = 1; i < sep; i++) {
+      final offset = Offset(
+        data.elementAt(i) * scale + strokeWidth,
+        data.elementAt(i + sep) * scale + strokeWidth,
+      );
       path.lineTo(offset.dx, offset.dy);
     }
-    path.lineTo(zero.dx, zero.dy);
+    path.close();
     canvas.drawPath(path, paint);
   }
 
   @override
-  bool shouldRepaint(covariant OctagonPainter oldDelegate) => false;
-}
-
-@Deprecated('use OctagonPainter')
-class PatternPainter extends CustomPainter {
-  const PatternPainter({
-    required this.data,
-    this.padding = 0.0,
-    this.centerPadding = 0.0,
-    required this.start,
-    required this.end,
-  }) : assert(data.length >= 2);
-
-  final List<double> data;
-  final double padding;
-  final double centerPadding;
-  final Color start;
-  final Color end;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    const row = 2;
-    final col = (data.length / 2).round();
-    final qx = size.width / col;
-    final padx = qx * padding * 0.5;
-    final cpad = qx * centerPadding * 0.5;
-    final baseline = size.height * 0.5;
-    final paint = Paint()
-      ..isAntiAlias = false
-      ..style = PaintingStyle.fill
-      ..shader = ui.Gradient.linear(
-        Offset(0, size.height / 2),
-        Offset(size.width, size.height / 2),
-        [start, end],
-      );
-
-    for (int yi = 0; yi < row; yi++) {
-      for (int xi = 0; xi < col; xi++) {
-        final norm = data[(yi * col) + xi];
-        if (yi == 0) {
-          final rect = Rect.fromLTRB(
-            qx * xi + padx,
-            baseline - (baseline * norm) - cpad,
-            qx * xi + qx - padx,
-            baseline - cpad,
-          );
-          canvas.drawRect(
-            rect,
-            paint,
-          );
-        } else {
-          final rect = Rect.fromLTRB(
-            qx * xi + padx,
-            baseline + cpad,
-            qx * xi + qx - padx,
-            baseline + (baseline * norm) + cpad,
-          );
-          canvas.drawRect(
-            rect,
-            paint,
-          );
-        }
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant PatternPainter oldDelegate) => false;
+  bool shouldRepaint(covariant OscilloscopePainter oldDelegate) => false;
 }
 
 class HexPattern extends StatelessWidget {
@@ -123,25 +63,17 @@ class HexPattern extends StatelessWidget {
     required this.hexKey,
     this.height = 10,
     this.widthFactor = 1.0,
+    this.strokeWeight = 0.1,
     this.start,
     this.end,
-    @Deprecated('will be removed') this.paddingFactor = 0.0,
-    @Deprecated('will be removed') this.centerPaddingFactor = 0.0,
-    @Deprecated('will be removed') this.edgeLetterLength = 0,
   });
 
   final String hexKey;
   final double height;
   final double widthFactor;
+  final double strokeWeight;
   final Color? start;
   final Color? end;
-
-  @Deprecated('will be removed')
-  final double paddingFactor;
-  @Deprecated('will be removed')
-  final double centerPaddingFactor;
-  @Deprecated('will be removed')
-  final int edgeLetterLength;
 
   @override
   Widget build(BuildContext context) {
@@ -149,34 +81,14 @@ class HexPattern extends StatelessWidget {
     pattern = HexConverter.hexToPattern(hexKey);
     final width = height * widthFactor;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          hexKey.substring(0, edgeLetterLength),
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: height,
-            color: start ?? pattern.start,
-          ),
-        ),
-        CustomPaint(
-          size: Size(width, height),
-          painter: OctagonPainter(
-            data: pattern.data,
-            start: start ?? pattern.start,
-            end: end ?? pattern.end,
-          ),
-        ),
-        Text(
-          hexKey.substring(hexKey.length - edgeLetterLength, hexKey.length),
-          maxLines: 1,
-          style: TextStyle(
-            fontSize: height,
-            color: end ?? pattern.end,
-          ),
-        ),
-      ],
+    return CustomPaint(
+      size: Size(width, height),
+      painter: OscilloscopePainter(
+        data: pattern.data,
+        start: start ?? pattern.start,
+        end: end ?? pattern.end,
+        strokeWeight: strokeWeight,
+      ),
     );
   }
 }
