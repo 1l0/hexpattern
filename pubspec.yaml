@@ -1,6 +1,6 @@
 name: hexpattern
-description: "nostr pubkey shape"
-version: 13.1.0
+description: "Nostr key shapes"
+version: 13.1.1
 repository: https://github.com/1l0/hexpattern
 
 environment:
