@@ -14,7 +14,7 @@ import 'package:web/web.dart' as web;
 import 'package:hexpattern/hexpattern.dart';
 
 const contentColumnWidth = 620.0;
-const title = 'nostr pubkey shape';
+const title = 'Nostr key shapes';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -200,7 +200,7 @@ class _DemoState extends State<Demo> {
                       child: TextField(
                         controller: textEditingController,
                         decoration: const InputDecoration(
-                          hintText: 'npub or public key',
+                          hintText: 'npub... or hex',
                         ),
                         maxLines: 3,
                         minLines: 1,
